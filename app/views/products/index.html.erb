@@ -1,0 +1,15 @@
+<h1>Daftar Produk</h1>
+
+<% if @products.any? %>
+  <ul>
+    <% @products.each do |product| %>
+      <li>
+        <strong><%= product.name %></strong> -
+        Rp<%= number_with_delimiter(product.price, delimiter: ".") %>
+        (stok: <%= product.stock %>)
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Belum ada produk.</p>
+<% end %>
