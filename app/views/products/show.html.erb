@@ -5,5 +5,5 @@
 <p><%= @product.description %></p>
 <p>Harga: Rp<%= number_with_delimiter(@product.price, delimiter: ".") %></p>
 <p>Stok: <%= @product.stock %></p>
-
+<p>Kategori: <%= @product.category&.name || "-" %></p>
 <%= link_to "Kembali ke daftar produk", products_path %>

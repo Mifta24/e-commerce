@@ -1,4 +1,7 @@
 class ProductsController < ApplicationController
+  # unutk mengatur kategori sebelum tindakan tertentu dijalankan, seperti show, edit, update, dan destroy. Hal ini memastikan bahwa kategori yang sesuai diambil dari database berdasarkan ID yang diberikan dalam parameter.
+  before_action :set_product, only: %i[ show edit update destroy ]
+
   def index
     @products = Product.order(created_at: :desc)
   end
@@ -41,7 +44,11 @@ class ProductsController < ApplicationController
 
   # untuk mengamankan parameter yang diterima dari form, sehingga hanya parameter yang diizinkan yang dapat digunakan untuk membuat atau memperbarui produk.
   private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_product
+      @product = Product.find(params.expect(:id))
+    end
     def product_params
-      params.require(:product).permit(:name, :description, :price, :stock)
+      params.require(:product).permit(:name, :description, :price, :stock, :category_id)
     end
 end

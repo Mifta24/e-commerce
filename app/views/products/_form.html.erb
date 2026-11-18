@@ -27,6 +27,11 @@
     <%= form.number_field :stock %>
   </div>
   <div>
+    <%= form.label :category_id, "Kategori" %><br>
+    <%= form.collection_select :category_id, Category.order(:name), :id, :name,
+          { include_blank: "-- Tanpa kategori --" } %>
+  </div>
+  <div>
     <%= form.submit(product.new_record? ? "Simpan" : "Simpan Perubahan") %>
   </div>
 <% end %>
