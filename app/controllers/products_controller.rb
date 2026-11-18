@@ -1,6 +1,8 @@
 class ProductsController < ApplicationController
   # Mengambil produk berdasarkan ID di URL sebelum action-action ini dijalankan
   before_action :set_product, only: %i[ show edit update destroy ]
+  allow_unauthenticated_access only: %i[index show]   # publik boleh lihat
+  before_action :require_admin, except: %i[index show] # sisanya admin saja
 
   def index
     # Filter opsional lewat ?category=ID. ID yang tidak dikenal dianggap "Semua".
