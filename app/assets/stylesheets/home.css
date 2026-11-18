@@ -67,3 +67,44 @@
   text-decoration: none;
 }
 .hero-card .card-cta:hover { background: #2a2a4a; color: #fff; }
+
+/* Judul seksi */
+.section-title { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 300; letter-spacing: -0.04em; line-height: 1.15; }
+.eyebrow { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); }
+
+/* Strip brand */
+.brand-strip {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.25rem 2rem;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  padding: 1.75rem 0; margin: 1rem 0;
+}
+.brand-item { display: inline-flex; align-items: center; gap: .5rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; font-size: .9rem; color: var(--ink-soft); }
+.brand-item i { font-size: 1.4rem; }
+
+/* Tile gambar placeholder (dipakai Top Product & Favorite Picks) */
+.tile--pink   { background: var(--pastel-pink); }
+.tile--yellow { background: var(--pastel-yellow); }
+.tile--lilac  { background: var(--pastel-lilac); }
+.tile { position: relative; border-radius: 2rem; overflow: hidden; display: grid; place-items: center; }
+.tile--lg { min-height: 22rem; }
+.tile-icon { font-size: 6rem; color: rgba(20, 20, 43, .15); line-height: 1; }
+.tile--lg .tile-icon { font-size: 10rem; }
+
+/* Filter kategori */
+.filter-pill {
+  border: 1px solid var(--line); border-radius: 999px; padding: .3rem 1rem;
+  font-size: .8rem; text-decoration: none; color: var(--ink); background: #fff;
+}
+.filter-pill:hover { border-color: var(--ink); }
+.filter-pill.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+/* Kartu Favorite Picks */
+.pick-image { aspect-ratio: 1; border-radius: 1.25rem; display: grid; place-items: center; margin-bottom: .75rem; }
+.pick-name { font-size: .9rem; font-weight: 500; }
+.pick-price { font-size: .85rem; color: var(--ink-soft); margin-bottom: .6rem; }
+.btn-outline-ink { --bs-btn-color: var(--ink); --bs-btn-border-color: var(--ink); --bs-btn-hover-bg: var(--ink); --bs-btn-hover-border-color: var(--ink); --bs-btn-hover-color: #fff; border-radius: 999px; }
+
+/* Testimoni */
+.testimonial { background: #fff; border: 1px solid var(--line); border-radius: 1.5rem; padding: 1.5rem; margin: 0; height: 100%; box-shadow: 0 6px 24px rgba(20, 20, 43, .05); }
+.testimonial blockquote { font-size: .95rem; color: var(--ink-soft); }
+.testimonial .avatar { width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--pastel-lilac); display: grid; place-items: center; }

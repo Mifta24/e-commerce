@@ -1,0 +1,13 @@
+<%# Nama brand di bawah hanya placeholder. Ganti dengan brand/partner asli (idealnya logo gambar). %>
+<% brands = [
+  [ "bi-hexagon", "Brand One" ],
+  [ "bi-triangle", "Brand Two" ],
+  [ "bi-diamond", "Brand Three" ],
+  [ "bi-circle-square", "Brand Four" ],
+  [ "bi-bookmark-star", "Brand Five" ]
+] %>
+<section class="brand-strip" aria-label="Brand partner">
+  <% brands.each do |icon, name| %>
+    <span class="brand-item"><i class="bi <%= icon %>"></i><%= name %></span>
+  <% end %>
+</section>

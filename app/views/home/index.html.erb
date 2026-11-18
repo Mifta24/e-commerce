@@ -36,3 +36,8 @@
     </div>
   <% end %>
 </section>
+
+<%= render "home/brands" %>
+<%= render "home/top_product", product: @top_product if @top_product %>
+<%= render "home/favorites" %>
+<%= render "home/testimonials" %>

@@ -1,0 +1,22 @@
+<%# Isi di bawah hanya placeholder, BUKAN ulasan asli. Ganti dengan testimoni nyata atau buat model Testimonial. %>
+<% testimonials = [
+  { name: "Nama Pelanggan", text: "Teks testimoni contoh. Ganti dengan ulasan pelanggan yang sebenarnya." },
+  { name: "Nama Pelanggan", text: "Teks testimoni contoh. Ganti dengan ulasan pelanggan yang sebenarnya." },
+  { name: "Nama Pelanggan", text: "Teks testimoni contoh. Ganti dengan ulasan pelanggan yang sebenarnya." }
+] %>
+<section class="testimonials py-5">
+  <h2 class="section-title text-center mb-4">Kata Pelanggan</h2>
+  <div class="row g-4">
+    <% testimonials.each do |t| %>
+      <div class="col-12 col-md-4">
+        <figure class="testimonial">
+          <blockquote class="mb-3"><%= t[:text] %></blockquote>
+          <figcaption class="d-flex align-items-center gap-2">
+            <span class="avatar"><i class="bi bi-person-fill"></i></span>
+            <span class="fw-medium small"><%= t[:name] %></span>
+          </figcaption>
+        </figure>
+      </div>
+    <% end %>
+  </div>
+</section>

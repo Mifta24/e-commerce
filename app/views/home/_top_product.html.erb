@@ -1,0 +1,18 @@
+<section class="top-product row align-items-center g-4 g-lg-5 py-5">
+  <div class="col-12 col-md-6">
+    <div class="tile tile--lg tile--pink">
+      <%# Placeholder sampai produk punya gambar %>
+      <i class="bi bi-bag-heart tile-icon" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="col-12 col-md-6">
+    <p class="eyebrow mb-2"><%= product.category&.name || "Produk" %></p>
+    <h2 class="section-title">Produk Terbaik<br>Bulan Ini</h2>
+    <h3 class="h5 mt-4"><%= product.name %></h3>
+    <% if product.description.present? %>
+      <p class="text-body-secondary"><%= truncate(product.description, length: 160) %></p>
+    <% end %>
+    <p class="fs-4 fw-semibold mb-4">Rp<%= number_with_delimiter(product.price, delimiter: ".") %></p>
+    <%= link_to "Lihat Produk", product_path(product), class: "btn btn-ink" %>
+  </div>
+</section>
