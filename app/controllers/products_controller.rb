@@ -40,7 +40,7 @@ class ProductsController < ApplicationController
   end
 
   # untuk mengamankan parameter yang diterima dari form, sehingga hanya parameter yang diizinkan yang dapat digunakan untuk membuat atau memperbarui produk.
-  private product_params
+  private
     def product_params
       params.require(:product).permit(:name, :description, :price, :stock)
     end
