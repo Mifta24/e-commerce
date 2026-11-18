@@ -1,0 +1,39 @@
+/* Tema global: warna, font, dan navbar. Dipakai semua halaman. */
+:root {
+  --ink: #14142b;
+  --ink-soft: #6b6b80;
+  --line: #ececf1;
+  --pastel-pink: #fbd5de;
+  --pastel-yellow: #f6f7a6;
+  --pastel-lilac: #e1d8f7;
+
+  --bs-body-font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --bs-body-color: var(--ink);
+  --bs-link-color-rgb: 20, 20, 43;
+  --bs-link-hover-color-rgb: 20, 20, 43;
+}
+
+body { letter-spacing: -0.01em; }
+
+/* Tombol utama gelap seperti di desain */
+.btn-ink {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--ink);
+  --bs-btn-border-color: var(--ink);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #2a2a4a;
+  --bs-btn-hover-border-color: #2a2a4a;
+  --bs-btn-active-bg: #2a2a4a;
+  --bs-btn-active-border-color: #2a2a4a;
+  border-radius: 999px;
+  padding: .75rem 1.75rem;
+  font-weight: 500;
+}
+
+/* Navbar */
+.site-nav { background: #fff; border-bottom: 1px solid var(--line); }
+.site-nav .navbar-brand { font-weight: 700; font-size: 1.25rem; letter-spacing: -0.03em; }
+.site-nav .nav-link { font-size: .875rem; color: var(--ink); padding-inline: 1rem; }
+.site-nav .nav-link.active { font-weight: 600; }
+.site-nav .nav-icons .btn { color: var(--ink); font-size: 1.05rem; padding: .35rem .6rem; }
+.site-nav .nav-icons .signin { font-size: .875rem; }

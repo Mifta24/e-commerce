@@ -1,6 +1,38 @@
-<%# Halaman home: kerangka kosong, desain menyusul. %>
-<section class="py-5 text-center">
-  <h1 class="display-5 fw-bold">Selamat datang di E Commerce</h1>
-  <p class="lead text-body-secondary">Halaman home sedang disiapkan.</p>
-  <%= link_to "Lihat Produk", products_path, class: "btn btn-primary btn-lg" %>
+<section class="hero">
+  <h1 class="hero-title">
+    Temukan
+    <strong>Gaya. Pilihan.</strong>
+    Untuk Anda
+  </h1>
+  <%= link_to "Jelajahi Produk", products_path, class: "btn btn-ink mt-3" %>
+</section>
+
+<section class="pb-5">
+  <% if @featured_products.any? %>
+    <div class="row g-4">
+      <% @featured_products.each_with_index do |product, i| %>
+        <div class="col-12 col-md-4">
+          <div class="hero-card hero-card--<%= i + 1 %>">
+            <div>
+              <span class="pill"><%= product.category&.name || "Produk" %></span>
+              <h2 class="card-name"><%= product.name %></h2>
+            </div>
+            <%# Placeholder sampai produk punya gambar %>
+            <i class="bi bi-bag-heart card-visual" aria-hidden="true"></i>
+            <div class="card-bar">
+              <span>Rp<%= number_with_delimiter(product.price, delimiter: ".") %></span>
+              <%= link_to product_path(product), class: "card-cta", "aria-label": "Lihat #{product.name}" do %>
+                <i class="bi bi-bag"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center text-body-secondary py-5">
+      <p>Belum ada produk untuk ditampilkan.</p>
+      <%= link_to "Tambah Produk", new_product_path, class: "btn btn-ink" %>
+    </div>
+  <% end %>
 </section>
