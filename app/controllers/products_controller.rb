@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  # unutk mengatur kategori sebelum tindakan tertentu dijalankan, seperti show, edit, update, dan destroy. Hal ini memastikan bahwa kategori yang sesuai diambil dari database berdasarkan ID yang diberikan dalam parameter.
+  # Mengambil produk berdasarkan ID di URL sebelum action-action ini dijalankan
   before_action :set_product, only: %i[ show edit update destroy ]
 
   def index
@@ -7,7 +7,6 @@ class ProductsController < ApplicationController
   end
 
   def show
-    @product = Product.find(params[:id])
   end
 
   def new
@@ -24,11 +23,9 @@ class ProductsController < ApplicationController
   end
 
   def edit
-    @product = Product.find(params[:id])
   end
 
   def update
-    @product = Product.find(params[:id])
     if @product.update(product_params)
       redirect_to @product, notice: "Product was successfully updated."
     else
@@ -37,7 +34,6 @@ class ProductsController < ApplicationController
   end
 
   def destroy
-    @product = Product.find(params[:id])
     @product.destroy
     redirect_to products_url, notice: "Product was successfully destroyed.", status: :see_other
   end
@@ -48,6 +44,7 @@ class ProductsController < ApplicationController
     def set_product
       @product = Product.find(params.expect(:id))
     end
+    # 
     def product_params
       params.require(:product).permit(:name, :description, :price, :stock, :category_id)
     end
