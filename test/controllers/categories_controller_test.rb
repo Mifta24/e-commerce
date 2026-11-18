@@ -45,4 +45,31 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to categories_url
   end
+
+  test "index shows category cards with product counts" do
+    Product.destroy_all
+    Product.create!(name: "Sneakers", price: 1000, stock: 1, category: @category)
+
+    get categories_url
+    assert_select ".category-card", Category.count
+    assert_select "#category_#{@category.id} .category-count", "1 produk"
+  end
+
+  test "show lists the products of the category" do
+    Product.destroy_all
+    Product.create!(name: "Sneakers", price: 1000, stock: 1, category: @category)
+    Product.create!(name: "Lainnya", price: 1000, stock: 1)
+
+    get category_url(@category)
+    assert_select ".pick", 1
+    assert_select ".pick-name", "Sneakers"
+  end
+
+  test "create with blank name re-renders the form with errors" do
+    assert_no_difference("Category.count") do
+      post categories_url, params: { category: { name: "" } }
+    end
+    assert_response :unprocessable_content
+    assert_select ".alert-danger"
+  end
 end

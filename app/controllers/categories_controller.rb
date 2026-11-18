@@ -4,11 +4,12 @@ class CategoriesController < ApplicationController
 
   # GET /categories or /categories.json
   def index
-    @categories = Category.all
+    @categories = Category.includes(:products).order(:name)
   end
 
   # GET /categories/1 or /categories/1.json
   def show
+    @products = @category.products.order(created_at: :desc)
   end
 
   # GET /categories/new
@@ -26,7 +27,7 @@ class CategoriesController < ApplicationController
 
     respond_to do |format|
       if @category.save
-        format.html { redirect_to @category, notice: "Category was successfully created." }
+        format.html { redirect_to @category, notice: "Kategori berhasil dibuat." }
         format.json { render :show, status: :created, location: @category }
       else
         format.html { render :new, status: :unprocessable_content }
@@ -39,7 +40,7 @@ class CategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @category.update(category_params)
-        format.html { redirect_to @category, notice: "Category was successfully updated.", status: :see_other }
+        format.html { redirect_to @category, notice: "Kategori berhasil diperbarui.", status: :see_other }
         format.json { render :show, status: :ok, location: @category }
       else
         format.html { render :edit, status: :unprocessable_content }
@@ -53,7 +54,7 @@ class CategoriesController < ApplicationController
     @category.destroy!
 
     respond_to do |format|
-      format.html { redirect_to categories_path, notice: "Category was successfully destroyed.", status: :see_other }
+      format.html { redirect_to categories_path, notice: "Kategori berhasil dihapus.", status: :see_other }
       format.json { head :no_content }
     end
   end

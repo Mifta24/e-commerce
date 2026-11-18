@@ -1,19 +1,31 @@
-<h1>Daftar Produk</h1>
-<% if notice %>
-  <p style="color: green;"><%= notice %></p>
-<% end %>
+<% content_for :title, "Produk | E Commerce" %>
 
-<p><%= link_to "Tambah Produk", new_product_path %></p>
+<div class="page-header">
+  <div>
+    <p class="eyebrow mb-1"><%= pluralize(@products.size, "produk", plural: "produk") %></p>
+    <h1 class="section-title"><strong>Produk</strong><%= " · #{@selected_category.name}" if @selected_category %></h1>
+  </div>
+  <%= link_to new_product_path, class: "btn btn-ink" do %><i class="bi bi-plus-lg me-1"></i>Tambah Produk<% end %>
+</div>
+
+<div class="d-flex flex-wrap gap-2 mb-4">
+  <%= link_to "Semua", products_path, class: "filter-pill #{'active' unless @selected_category}" %>
+  <% @categories.each do |category| %>
+    <%= link_to category.name, products_path(category: category.id),
+          class: "filter-pill #{'active' if category == @selected_category}" %>
+  <% end %>
+</div>
+
 <% if @products.any? %>
-  <ul>
+  <div class="row g-4">
     <% @products.each do |product| %>
-      <li>
-        <%= link_to product.name, product_path(product) %> -
-        Rp<%= number_with_delimiter(product.price, delimiter: ".") %>
-        (stok: <%= product.stock %>)
-      </li>
+      <div class="col-6 col-md-4 col-lg-3">
+        <%= render "products/card", product: product %>
+      </div>
     <% end %>
-  </ul>
+  </div>
 <% else %>
-  <p>Belum ada produk.</p>
+  <div class="text-center text-body-secondary py-5">
+    <p>Belum ada produk<%= " di kategori ini" if @selected_category %>.</p>
+  </div>
 <% end %>

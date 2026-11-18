@@ -37,3 +37,68 @@ body { letter-spacing: -0.01em; }
 .site-nav .nav-link.active { font-weight: 600; }
 .site-nav .nav-icons .btn { color: var(--ink); font-size: 1.05rem; padding: .35rem .6rem; }
 .site-nav .nav-icons .signin { font-size: .875rem; }
+
+/* Komponen bersama (home, produk, kategori) */
+/* Judul seksi */
+.section-title { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 300; letter-spacing: -0.04em; line-height: 1.15; }
+.eyebrow { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); }
+
+/* Tile gambar placeholder (dipakai Top Product & Favorite Picks) */
+.tile--pink   { background: var(--pastel-pink); }
+.tile--yellow { background: var(--pastel-yellow); }
+.tile--lilac  { background: var(--pastel-lilac); }
+.tile { position: relative; border-radius: 2rem; overflow: hidden; display: grid; place-items: center; }
+.tile--lg { min-height: 22rem; }
+.tile-icon { font-size: 6rem; color: rgba(20, 20, 43, .15); line-height: 1; }
+.tile--lg .tile-icon { font-size: 10rem; }
+
+/* Filter kategori */
+.filter-pill {
+  border: 1px solid var(--line); border-radius: 999px; padding: .3rem 1rem;
+  font-size: .8rem; text-decoration: none; color: var(--ink); background: #fff;
+}
+.filter-pill:hover { border-color: var(--ink); }
+.filter-pill.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+/* Kartu Favorite Picks */
+.pick-image { aspect-ratio: 1; border-radius: 1.25rem; display: grid; place-items: center; margin-bottom: .75rem; }
+.pick-name { font-size: .9rem; font-weight: 500; }
+.pick-price { font-size: .85rem; color: var(--ink-soft); margin-bottom: .6rem; }
+.btn-outline-ink { --bs-btn-color: var(--ink); --bs-btn-border-color: var(--ink); --bs-btn-hover-bg: var(--ink); --bs-btn-hover-border-color: var(--ink); --bs-btn-hover-color: #fff; border-radius: 999px; }
+
+/* Header halaman (produk, kategori, dst.) */
+.page-header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem; padding: 1rem 0 2rem; }
+.page-header .section-title { margin: 0; }
+.page-header .section-title strong { font-weight: 700; }
+
+/* Alert flash */
+.flash { border-radius: 1rem; border: 0; font-size: .9rem; }
+
+/* Pill kecil (kategori, stok) */
+.pill-tag { display: inline-block; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: .2rem .8rem; font-size: .75rem; color: var(--ink); text-decoration: none; }
+.pill-tag--muted { background: #f4f4f8; border-color: transparent; color: var(--ink-soft); }
+.pill-tag--danger { background: #fdeaea; border-color: transparent; color: #b42318; }
+
+/* Kartu kategori */
+.category-card { display: block; border-radius: 1.75rem; padding: 1.5rem; min-height: 11rem; text-decoration: none; color: var(--ink); position: relative; overflow: hidden; transition: transform .15s ease; }
+.category-card:hover { transform: translateY(-3px); color: var(--ink); }
+.category-card .category-name { font-size: 1.5rem; font-weight: 400; letter-spacing: -0.03em; }
+.category-card .category-count { font-size: .85rem; color: var(--ink-soft); }
+.category-card .tile-icon { position: absolute; right: -.5rem; bottom: -.5rem; font-size: 6rem; }
+
+/* Kartu produk (grid) */
+.pick .pick-image { transition: transform .15s ease; }
+.pick:hover .pick-image { transform: translateY(-3px); }
+
+/* Detail produk */
+.detail-price { font-size: 1.75rem; font-weight: 600; letter-spacing: -0.03em; }
+
+/* Form */
+.form-card { background: #fff; border: 1px solid var(--line); border-radius: 1.75rem; padding: 2rem; max-width: 40rem; box-shadow: 0 6px 24px rgba(20, 20, 43, .05); }
+.form-card .form-label { font-size: .85rem; font-weight: 500; }
+.form-card .form-control, .form-card .form-select, .form-card .input-group-text { border-radius: 1rem; border-color: var(--line); padding: .7rem 1rem; }
+.form-card .input-group > .form-control { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.form-card .input-group > .input-group-text { border-top-right-radius: 0; border-bottom-right-radius: 0; background: #f4f4f8; }
+.form-card .form-control:focus, .form-card .form-select:focus { border-color: var(--ink); box-shadow: 0 0 0 .2rem rgba(20, 20, 43, .08); }
+.btn-text { color: var(--ink-soft); text-decoration: none; font-size: .9rem; }
+.btn-text:hover { color: var(--ink); }

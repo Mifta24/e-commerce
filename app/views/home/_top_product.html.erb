@@ -12,7 +12,7 @@
     <% if product.description.present? %>
       <p class="text-body-secondary"><%= truncate(product.description, length: 160) %></p>
     <% end %>
-    <p class="fs-4 fw-semibold mb-4">Rp<%= number_with_delimiter(product.price, delimiter: ".") %></p>
+    <p class="fs-4 fw-semibold mb-4"><%= rupiah(product.price) %></p>
     <%= link_to "Lihat Produk", product_path(product), class: "btn btn-ink" %>
   </div>
 </section>

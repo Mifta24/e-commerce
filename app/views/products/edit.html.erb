@@ -1,5 +1,7 @@
-<h1>Edit Produk</h1>
+<% content_for :title, "Edit #{@product.name} | E Commerce" %>
+
+<div class="page-header">
+  <h1 class="section-title"><strong>Edit</strong> Produk</h1>
+</div>
 
 <%= render "form", product: @product %>
-
-<%= link_to "Batal", @product %>

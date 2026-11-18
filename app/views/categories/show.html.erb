@@ -1,10 +1,27 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "#{@category.name} | E Commerce" %>
 
-<%= render @category %>
+<nav class="mb-4"><%= link_to "← Kembali ke kategori", categories_path, class: "btn-text" %></nav>
 
-<div>
-  <%= link_to "Edit this category", edit_category_path(@category) %> |
-  <%= link_to "Back to categories", categories_path %>
-
-  <%= button_to "Destroy this category", @category, method: :delete %>
+<div class="page-header">
+  <div>
+    <p class="eyebrow mb-1"><%= @products.size %> produk</p>
+    <h1 class="section-title"><strong><%= @category.name %></strong></h1>
+  </div>
+  <div class="d-flex flex-wrap gap-2">
+    <%= link_to "Edit", edit_category_path(@category), class: "btn btn-ink" %>
+    <%= button_to "Hapus", @category, method: :delete, class: "btn btn-outline-danger rounded-pill px-4",
+          form: { data: { turbo_confirm: "Yakin hapus kategori ini? Produk di dalamnya tetap ada, hanya jadi tanpa kategori." } } %>
+  </div>
 </div>
+
+<% if @products.any? %>
+  <div class="row g-4">
+    <% @products.each do |product| %>
+      <div class="col-6 col-md-4 col-lg-3">
+        <%= render "products/card", product: product %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-center text-body-secondary py-5">Belum ada produk di kategori ini.</p>
+<% end %>

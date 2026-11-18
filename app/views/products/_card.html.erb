@@ -1,0 +1,13 @@
+<div class="pick">
+  <div class="pick-image tile--<%= tone_for(product) %>">
+    <%# Placeholder sampai produk punya gambar %>
+    <i class="bi bi-bag-heart tile-icon" aria-hidden="true"></i>
+  </div>
+  <div class="pick-name text-truncate" title="<%= product.name %>"><%= product.name %></div>
+  <div class="pick-price">
+    <%= rupiah(product.price) %>
+    <% if product.stock.zero? %><span class="pill-tag pill-tag--danger ms-1">Habis</span><% end %>
+  </div>
+  <%# Belum ada keranjang, jadi tombol ini mengarah ke halaman produk. _top supaya tetap jalan di dalam Turbo Frame. %>
+  <%= link_to "Lihat Detail", product_path(product), class: "btn btn-outline-ink btn-sm w-100", data: { turbo_frame: "_top" } %>
+</div>

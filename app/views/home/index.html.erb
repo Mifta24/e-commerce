@@ -20,7 +20,7 @@
             <%# Placeholder sampai produk punya gambar %>
             <i class="bi bi-bag-heart card-visual" aria-hidden="true"></i>
             <div class="card-bar">
-              <span>Rp<%= number_with_delimiter(product.price, delimiter: ".") %></span>
+              <span><%= rupiah(product.price) %></span>
               <%= link_to product_path(product), class: "card-cta", "aria-label": "Lihat #{product.name}" do %>
                 <i class="bi bi-bag"></i>
               <% end %>

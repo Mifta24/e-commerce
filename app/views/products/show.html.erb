@@ -1,9 +1,37 @@
-<h1><%= @product.name %></h1>
-<%= link_to "Edit", edit_product_path(@product) %> |
-<%= button_to "Hapus", @product, method: :delete,
-      form: { style: "display: inline;", data: { turbo_confirm: "Yakin hapus produk ini?" } } %>
-<p><%= @product.description %></p>
-<p>Harga: Rp<%= number_with_delimiter(@product.price, delimiter: ".") %></p>
-<p>Stok: <%= @product.stock %></p>
-<p>Kategori: <%= @product.category&.name || "-" %></p>
-<%= link_to "Kembali ke daftar produk", products_path %>
+<% content_for :title, "#{@product.name} | E Commerce" %>
+
+<nav class="mb-4"><%= link_to "← Kembali ke produk", products_path, class: "btn-text" %></nav>
+
+<section class="row align-items-center g-4 g-lg-5">
+  <div class="col-12 col-md-6">
+    <div class="tile tile--lg tile--<%= tone_for(@product) %>">
+      <%# Placeholder sampai produk punya gambar %>
+      <i class="bi bi-bag-heart tile-icon" aria-hidden="true"></i>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6">
+    <% if @product.category %>
+      <%= link_to @product.category.name, category_path(@product.category), class: "pill-tag mb-3" %>
+    <% end %>
+    <h1 class="section-title mb-3"><strong><%= @product.name %></strong></h1>
+    <p class="detail-price mb-2"><%= rupiah(@product.price) %></p>
+    <p class="mb-4">
+      <% if @product.stock.positive? %>
+        <span class="pill-tag pill-tag--muted">Stok: <%= @product.stock %></span>
+      <% else %>
+        <span class="pill-tag pill-tag--danger">Stok habis</span>
+      <% end %>
+    </p>
+
+    <% if @product.description.present? %>
+      <p class="text-body-secondary mb-4"><%= simple_format(@product.description) %></p>
+    <% end %>
+
+    <div class="d-flex flex-wrap gap-2">
+      <%= link_to "Edit", edit_product_path(@product), class: "btn btn-ink" %>
+      <%= button_to "Hapus", @product, method: :delete, class: "btn btn-outline-danger rounded-pill px-4",
+            form: { data: { turbo_confirm: "Yakin hapus produk ini?" } } %>
+    </div>
+  </div>
+</section>

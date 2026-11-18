@@ -1,37 +1,34 @@
-<%= form_with model: product do |form| %>
-  <% if product.errors.any? %>
-    <div style="color: red;">
-      <p>Gagal menyimpan:</p>
-      <ul>
-        <% product.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<%= form_with model: product, class: "form-card" do |form| %>
+  <%= render "shared/form_errors", record: product %>
 
-  <div>
-    <%= form.label :name, "Nama" %><br>
-    <%= form.text_field :name %>
+  <div class="mb-3">
+    <%= form.label :name, "Nama", class: "form-label" %>
+    <%= form.text_field :name, class: "form-control" %>
   </div>
-  <div>
-    <%= form.label :description, "Deskripsi" %><br>
-    <%= form.text_area :description %>
+  <div class="mb-3">
+    <%= form.label :description, "Deskripsi", class: "form-label" %>
+    <%= form.text_area :description, rows: 4, class: "form-control" %>
   </div>
-  <div>
-    <%= form.label :price, "Harga (Rp)" %><br>
-    <%= form.number_field :price %>
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-sm-7">
+      <%= form.label :price, "Harga", class: "form-label" %>
+      <div class="input-group">
+        <span class="input-group-text">Rp</span>
+        <%= form.number_field :price, min: 0, class: "form-control" %>
+      </div>
+    </div>
+    <div class="col-12 col-sm-5">
+      <%= form.label :stock, "Stok", class: "form-label" %>
+      <%= form.number_field :stock, min: 0, class: "form-control" %>
+    </div>
   </div>
-  <div>
-    <%= form.label :stock, "Stok" %><br>
-    <%= form.number_field :stock %>
-  </div>
-  <div>
-    <%= form.label :category_id, "Kategori" %><br>
+  <div class="mb-4">
+    <%= form.label :category_id, "Kategori", class: "form-label" %>
     <%= form.collection_select :category_id, Category.order(:name), :id, :name,
-          { include_blank: "-- Tanpa kategori --" } %>
+          { include_blank: "-- Tanpa kategori --" }, class: "form-select" %>
   </div>
-  <div>
-    <%= form.submit(product.new_record? ? "Simpan" : "Simpan Perubahan") %>
+  <div class="d-flex align-items-center gap-3">
+    <%= form.submit(product.new_record? ? "Simpan" : "Simpan Perubahan", class: "btn btn-ink") %>
+    <%= link_to "Batal", (product.persisted? ? product : products_path), class: "btn-text" %>
   </div>
 <% end %>

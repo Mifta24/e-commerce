@@ -1,22 +1,13 @@
-<%= form_with(model: category) do |form| %>
-  <% if category.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(category.errors.count, "error") %> prohibited this category from being saved:</h2>
+<%= form_with(model: category, class: "form-card") do |form| %>
+  <%= render "shared/form_errors", record: category %>
 
-      <ul>
-        <% category.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="mb-4">
+    <%= form.label :name, "Nama", class: "form-label" %>
+    <%= form.text_field :name, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="d-flex align-items-center gap-3">
+    <%= form.submit(category.new_record? ? "Simpan" : "Simpan Perubahan", class: "btn btn-ink") %>
+    <%= link_to "Batal", (category.persisted? ? category : categories_path), class: "btn-text" %>
   </div>
 <% end %>
