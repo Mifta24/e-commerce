@@ -1,0 +1,9 @@
+<h1><%= @product.name %></h1>
+<%= link_to "Edit", edit_product_path(@product) %> |
+<%= button_to "Hapus", @product, method: :delete,
+      form: { style: "display: inline;", data: { turbo_confirm: "Yakin hapus produk ini?" } } %>
+<p><%= @product.description %></p>
+<p>Harga: Rp<%= number_with_delimiter(@product.price, delimiter: ".") %></p>
+<p>Stok: <%= @product.stock %></p>
+
+<%= link_to "Kembali ke daftar produk", products_path %>

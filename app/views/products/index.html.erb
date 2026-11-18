@@ -1,10 +1,14 @@
 <h1>Daftar Produk</h1>
+<% if notice %>
+  <p style="color: green;"><%= notice %></p>
+<% end %>
 
+<p><%= link_to "Tambah Produk", new_product_path %></p>
 <% if @products.any? %>
   <ul>
     <% @products.each do |product| %>
       <li>
-        <strong><%= product.name %></strong> -
+        <%= link_to product.name, product_path(product) %> -
         Rp<%= number_with_delimiter(product.price, delimiter: ".") %>
         (stok: <%= product.stock %>)
       </li>

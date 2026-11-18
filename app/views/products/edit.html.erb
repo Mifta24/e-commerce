@@ -1,0 +1,36 @@
+<h1>Edit Produk</h1>
+
+<%= form_with model: @product do |form| %>
+  <% if @product.errors.any? %>
+    <div style="color: red;">
+      <p>Gagal menyimpan:</p>
+      <ul>
+        <% @product.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, "Nama" %><br>
+    <%= form.text_field :name %>
+  </div>
+  <div>
+    <%= form.label :description, "Deskripsi" %><br>
+    <%= form.text_area :description %>
+  </div>
+  <div>
+    <%= form.label :price, "Harga (Rp)" %><br>
+    <%= form.number_field :price %>
+  </div>
+  <div>
+    <%= form.label :stock, "Stok" %><br>
+    <%= form.number_field :stock %>
+  </div>
+  <div>
+    <%= form.submit "Simpan Perubahan" %>
+  </div>
+<% end %>
+
+<%= link_to "Batal", @product %>
