@@ -1,7 +1,9 @@
 class CategoriesController < ApplicationController
   # unutk mengatur kategori sebelum tindakan tertentu dijalankan, seperti show, edit, update, dan destroy. Hal ini memastikan bahwa kategori yang sesuai diambil dari database berdasarkan ID yang diberikan dalam parameter.
   before_action :set_category, only: %i[ show edit update destroy ]
-
+  allow_unauthenticated_access only: %i[index show]   # publik boleh lihat
+  before_action :require_admin, except: %i[index show] # sisanya admin saja
+  
   # GET /categories or /categories.json
   def index
     @categories = Category.includes(:products).order(:name)
