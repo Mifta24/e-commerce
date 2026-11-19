@@ -3,12 +3,12 @@ class CartItem < ApplicationRecord
   belongs_to :product
 
   validates :quantity,  numericality: { only_integer: true, greater_than: 0 }
-  validate :quality_within_stock
+  validate :quantity_within_stock
 
   def subtotal
-    quantity * product.pretty_inspect 
+    quantity * product.price
   end
-
+  
   private
   def quantity_within_stock
    return unless product && quantity

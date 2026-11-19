@@ -3,12 +3,40 @@ class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
-  helper_method :current_user, :admin?
+  helper_method :current_user, :admin?, :current_cart
 
   private
 
-  def current_user = Current.user
+  def current_user 
+    resume_session
+     Current.user
+  end
+
   def admin? = current_user&.admin?
+
+   
+  def current_cart
+    @current_cart ||=
+      if current_user
+        current_user.cart
+      elseif cookies.signed[:cart_token]
+        Cart.find_by(token: cookies.signed[:cart_token], user_id: nil)
+      end
+  end
+
+  def current_cart!
+    @current_cart ||= curent_cart || create_cart
+  end
+
+  def create_cart
+    if current_user
+      current_user.create_cart!
+    else
+      Cart.create!.tap do |cart|
+        cookies.signed[:cart_token] = { value: cart.token, expires: 1.year.from_now }
+      end
+    end
+  end
 
   def require_admin
     redirect_to root_path, alert: "Anda tidak punya akses." unless admin?
