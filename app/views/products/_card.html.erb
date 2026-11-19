@@ -1,8 +1,12 @@
 <div class="pick">
-  <div class="pick-image tile--<%= tone_for(product) %>">
-    <%# Placeholder sampai produk punya gambar %>
+ <div class="pick-image tile--<%= tone_for(product) %>">
+  <% if product.image.attached? %>
+    <%= image_tag product.image, alt: product.name, class: "product-img" %>
+  <% else %>
     <i class="bi bi-bag-heart tile-icon" aria-hidden="true"></i>
-  </div>
+  <% end %>
+</div>
+
   <div class="pick-name text-truncate" title="<%= product.name %>"><%= product.name %></div>
   <div class="pick-price">
     <%= rupiah(product.price) %>

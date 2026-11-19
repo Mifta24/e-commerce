@@ -1,9 +1,13 @@
 <section class="top-product row align-items-center g-4 g-lg-5 py-5">
   <div class="col-12 col-md-6">
     <div class="tile tile--lg tile--pink">
-      <%# Placeholder sampai produk punya gambar %>
-      <i class="bi bi-bag-heart tile-icon" aria-hidden="true"></i>
-    </div>
+  <% if product.image.attached? %>
+    <%= image_tag product.image, alt: product.name, class: "product-img" %>
+  <% else %>
+    <i class="bi bi-bag-heart tile-icon" aria-hidden="true"></i>
+  <% end %>
+</div>
+
   </div>
   <div class="col-12 col-md-6">
     <p class="eyebrow mb-2"><%= product.category&.name || "Produk" %></p>

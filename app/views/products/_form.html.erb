@@ -1,5 +1,15 @@
 <%= form_with model: product, class: "form-card" do |form| %>
   <%= render "shared/form_errors", record: product %>
+<div class="mb-3">
+  <%= form.label :image, "Gambar", class: "form-label" %>
+  <% if product.image.attached? %>
+    <div class="mb-2">
+      <%= image_tag product.image, alt: product.name, style: "max-width: 12rem; border-radius: 1rem;" %>
+    </div>
+  <% end %>
+  <%= form.file_field :image, accept: "image/png,image/jpeg,image/webp", class: "form-control" %>
+  <div class="form-text">JPG, PNG, atau WebP. Maksimal 5 MB.</div>
+</div>
 
   <div class="mb-3">
     <%= form.label :name, "Nama", class: "form-label" %>
