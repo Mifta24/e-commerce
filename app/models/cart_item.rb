@@ -11,7 +11,8 @@ class CartItem < ApplicationRecord
   
   private
   def quantity_within_stock
-   return unless product && quantity
+    # kembalikan jika product atau quantity nil, karena validasi ini hanya relevan jika keduanya ada
+   return unless product && quantity  
    errors.add(:quantity, "exceeds available stock") if quantity > product.stock
   end
 end

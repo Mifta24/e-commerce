@@ -10,10 +10,6 @@ class AddressesController < ApplicationController
   def show
   end
 
-  def set_address
-    @address = Address.find(params[:id])
-  end
-
   # GET /addresses/new
   def new
     @address = Address.new
@@ -64,7 +60,7 @@ class AddressesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_address
-      @address = Address.find(params.expect(:id))
+      @address = current_user.addresses.find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.

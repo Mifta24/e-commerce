@@ -19,7 +19,7 @@ class Order < ApplicationRecord
 
    transaction do
     # urutatan tetap supaya ada dua checkout bersamaan gak saling nunggu
-    cart.cart_items.includes(:product).order(product_id).each do |item|
+    cart.cart_items.includes(:product).order(:product_id).each do |item|
       product = item.product
       product.lock!
 
@@ -44,6 +44,7 @@ class Order < ApplicationRecord
     order.save!
     cart.cart_items.destroy_all
   end
-  
-  order
+
+    order
+  end
 end

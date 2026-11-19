@@ -1,0 +1,29 @@
+<h1>Pesanan Saya</h1>
+
+<% if @orders.empty? %>
+  <p>Kamu belum pernah membuat pesanan.</p>
+  <%= link_to "Mulai belanja", products_path %>
+<% else %>
+  <table class="table align-middle">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Tanggal</th>
+        <th>Status</th>
+        <th>Total</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @orders.each do |order| %>
+        <tr>
+          <td>#<%= order.id %></td>
+          <td><%= order.created_at.strftime("%d-%m-%Y %H:%M") %></td>
+          <td><%= order.status.humanize %></td>
+          <td><%= rupiah(order.total) %></td>
+          <td><%= link_to "Lihat", order_path(order) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

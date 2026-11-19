@@ -1,0 +1,44 @@
+<h1>Checkout</h1>
+
+<h2>Ringkasan Pesanan</h2>
+<table class="table align-middle">
+  <thead>
+    <tr>
+      <th>Produk</th>
+      <th>Jumlah</th>
+      <th>Subtotal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @cart.cart_items.each do |item| %>
+      <tr>
+        <td><%= item.product.name %></td>
+        <td><%= item.quantity %></td>
+        <td><%= rupiah(item.subtotal) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<p><strong>Total: <%= rupiah(@cart.total) %></strong></p>
+
+<h2>Alamat Pengiriman</h2>
+
+<% if @addresses.empty? %>
+  <p>Kamu belum punya alamat pengiriman.</p>
+  <%= link_to "Tambah alamat", new_address_path %>
+<% else %>
+  <%= form_with url: orders_path do |form| %>
+    <% @addresses.each do |address| %>
+      <div class="mb-3">
+        <%= form.radio_button :address_id, address.id, required: true %>
+        <%= form.label :address_id, value: address.id do %>
+          <strong><%= address.recipient_name %></strong> (<%= address.phone %>)<br>
+          <%= address.street %><br>
+          <%= address.city %>, <%= address.province %> <%= address.postal_code %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%= form.submit "Buat pesanan", class: "btn btn-ink" %>
+  <% end %>
+<% end %>

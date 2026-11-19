@@ -1,0 +1,34 @@
+<h1>Pesanan #<%= @order.id %></h1>
+<p>Status: <strong><%= @order.status.humanize %></strong></p>
+
+<h2>Dikirim ke</h2>
+<p>
+  <%= @order.recipient_name %> (<%= @order.phone %>)<br>
+  <%= @order.street %><br>
+  <%= @order.city %>, <%= @order.province %> <%= @order.postal_code %>
+</p>
+
+<h2>Barang</h2>
+<table class="table align-middle">
+  <thead>
+    <tr>
+      <th>Produk</th>
+      <th>Harga</th>
+      <th>Jumlah</th>
+      <th>Subtotal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @order.order_items.each do |item| %>
+      <tr>
+        <td><%= item.product_name %></td>
+        <td><%= rupiah(item.unit_price) %></td>
+        <td><%= item.quantity %></td>
+        <td><%= rupiah(item.subtotal) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p><strong>Total: <%= rupiah(@order.total) %></strong></p>
+<%= link_to "Kembali ke pesanan saya", orders_path %>
