@@ -5,12 +5,13 @@ class ProductsController < ApplicationController
   before_action :require_admin, except: %i[index show] # sisanya admin saja
 
   def index
-    # Filter opsional lewat ?category=ID. ID yang tidak dikenal dianggap "Semua".
-    @categories = Category.order(:name)
+     @categories = Category.order(:name)
     @selected_category = @categories.find_by(id: params[:category])
-    @products = Product.order(created_at: :desc)
+    # Filter opsional lewat ?category=ID. ID yang tidak dikenal dianggap "Semua".
+    @products = Product.search(params[:q]).order(created_at: :desc, id: :desc)
     @products = @products.where(category: @selected_category) if @selected_category
-    @products = @products.search(params[:q]).order(created_at: :desc)
+    @products = @products.page(params[:page]).per(12)
+
   end
 
   def show

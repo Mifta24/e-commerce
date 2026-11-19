@@ -2,7 +2,7 @@
 
 <div class="page-header">
   <div>
-    <p class="eyebrow mb-1"><%= pluralize(@products.size, "produk", plural: "produk") %></p>
+  <p class="eyebrow mb-1"><%= pluralize(@products.total_count, "produk", plural: "produk") %></p>
     <h1 class="section-title"><strong>Produk</strong><%= " · #{@selected_category.name}" if @selected_category %></h1>
     <% if params[:q].present? %>
   <p class="text-body-secondary mb-0">
@@ -40,3 +40,4 @@
     <% end %>
   </div>
 <% end %>
+<%= paginate @products %>

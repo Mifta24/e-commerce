@@ -106,3 +106,18 @@ body { letter-spacing: -0.01em; }
 .form-card .form-control:focus, .form-card .form-select:focus { border-color: var(--ink); box-shadow: 0 0 0 .2rem rgba(20, 20, 43, .08); }
 .btn-text { color: var(--ink-soft); text-decoration: none; font-size: .9rem; }
 .btn-text:hover { color: var(--ink); }
+
+/* Pagination (kaminari): mengikuti warna dan bentuk tema */
+.pagination {
+  gap: .35rem;
+  --bs-pagination-color: var(--ink);
+  --bs-pagination-hover-color: var(--ink);
+  --bs-pagination-focus-color: var(--ink);
+  --bs-pagination-active-bg: var(--ink);
+  --bs-pagination-active-border-color: var(--ink);
+  --bs-pagination-active-color: #fff;
+  --bs-pagination-border-radius: 999px;
+  --bs-pagination-focus-box-shadow: 0 0 0 .2rem rgba(20, 20, 43, .08);
+}
+.pagination .page-link { border-color: var(--line); min-width: 2.5rem; text-align: center; }
+.pagination .page-item:not(:first-child) .page-link { margin-left: 0; }

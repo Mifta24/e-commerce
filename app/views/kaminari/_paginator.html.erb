@@ -1,0 +1,21 @@
+<%# Pembungkus pagination, gaya Bootstrap.
+  Menimpa template bawaan kaminari. Tombol "pertama" dan "terakhir" tidak dipakai,
+  halaman 1 dan halaman terakhir tetap tampil lewat pengaturan outer_window
+  di config/initializers/kaminari_config.rb. -%>
+<%= paginator.render do -%>
+  <nav class="mt-5" role="navigation" aria-label="Navigasi halaman">
+    <ul class="pagination justify-content-center flex-wrap">
+      <%= prev_page_tag unless current_page.first? %>
+      <% each_page do |page| -%>
+        <% if page.display_tag? -%>
+          <%= page_tag page %>
+        <% elsif !page.was_truncated? -%>
+          <%= gap_tag %>
+        <% end -%>
+      <% end -%>
+      <% unless current_page.out_of_range? %>
+        <%= next_page_tag unless current_page.last? %>
+      <% end %>
+    </ul>
+  </nav>
+<% end -%>
