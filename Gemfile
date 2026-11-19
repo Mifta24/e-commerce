@@ -68,3 +68,5 @@ end
 gem "redis", "~> 6.0"
 
 gem "dotenv-rails", "~> 3.2", :groups => [:development, :test]
+
+gem "kaminari", "~> 1.3"
