@@ -18,7 +18,7 @@ class Product < ApplicationRecord
   end
 
   def self.search(keyword)
-    retrun all if keyword.blank?
+    return all if keyword.blank?
 
     pola="%#{keyword.downcase}%"
     where("name ILIKE :q OR description ILIKE :q", q: pola)
