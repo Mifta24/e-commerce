@@ -7,6 +7,7 @@ class SessionsController < ApplicationController
 
   def create
     if user = User.authenticate_by(params.permit(:email_address, :password))
+      merge_guest_cart_into(user)
       start_new_session_for user
       redirect_to after_authentication_url
     else

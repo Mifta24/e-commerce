@@ -15,6 +15,14 @@ class Cart < ApplicationRecord
     retry
   end
 
+  # pindahi semua item dari cart lain ke cart ini, lalu hapus cart lain
+  def absorb(other_cart)
+    other_cart.cart_items.find_each do |item|
+      add_product(item.product, item.quantity)
+    end
+    other_cart.destroy
+  end
+
   def total_items = cart_items.sum(:quantity)
 
   def total = cart_items.includes(:product).sum(&:subtotal)

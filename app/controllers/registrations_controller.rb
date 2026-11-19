@@ -8,6 +8,7 @@ class RegistrationsController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+      merge_guest_cart_into(@user)
       start_new_session_for @user
       redirect_to root_path, notice: "Akun berhasil dibuat."
     else

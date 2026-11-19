@@ -19,13 +19,13 @@ class ApplicationController < ActionController::Base
     @current_cart ||=
       if current_user
         current_user.cart
-      elseif cookies.signed[:cart_token]
+      elsif cookies.signed[:cart_token]
         Cart.find_by(token: cookies.signed[:cart_token], user_id: nil)
       end
   end
 
   def current_cart!
-    @current_cart ||= curent_cart || create_cart
+    @current_cart ||= current_cart || create_cart
   end
 
   def create_cart
@@ -37,6 +37,20 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+
+  def merge_guest_cart_into(user)
+    token = cookies.signed[:cart_token]
+    return if token.blank?
+
+    guest_cart = Cart.find_by(token: token, user_id: nil)
+
+    if guest_cart
+      if user.cart
+        user.cart.absorb(guest_cart)
+      else
+        guest_cart.update!(user: user)
+      end
+    end
 
   def require_admin
     redirect_to root_path, alert: "Anda tidak punya akses." unless admin?

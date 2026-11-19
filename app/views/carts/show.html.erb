@@ -1,10 +1,36 @@
-<p style="color: green"><%= notice %></p>
+<h1>Keranjang Belanja</h1>
 
-<%= render @cart %>
+<% if @cart.nil? || @cart.cart_items.empty? %>
+  <p>Keranjang kamu masih kosong.</p>
+  <%= link_to "Lihat produk", products_path %>
+<% else %>
+  <table class="table align-middle">
+    <thead>
+      <tr>
+        <th>Produk</th>
+        <th>Harga</th>
+        <th>Jumlah</th>
+        <th>Subtotal</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cart.cart_items.each do |item| %>
+        <tr>
+          <td><%= item.product.name %></td>
+          <td><%= rupiah(item.product.price) %></td>
+          <td>
+            <%= form_with model: item, url: cart_item_path(item) do |form| %>
+              <%= form.number_field :quantity, min: 1, max: item.product.stock %>
+              <%= form.submit "Ubah" %>
+            <% end %>
+          </td>
+          <td><%= rupiah(item.subtotal) %></td>
+          <td><%= button_to "Hapus", cart_item_path(item), method: :delete %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<div>
-  <%= link_to "Edit this cart", edit_cart_path(@cart) %> |
-  <%= link_to "Back to carts", carts_path %>
-
-  <%= button_to "Destroy this cart", @cart, method: :delete %>
-</div>
+  <p><strong>Total: <%= rupiah(@cart.total) %></strong></p>
+<% end %>

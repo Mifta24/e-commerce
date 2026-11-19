@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  resources :carts, only: :show
-  resources: :cart_items, only: %i[create update destroy]
+  resource :cart, only: :show
+  resources  :cart_items, only: %i[create update destroy]
   resources :addresses
   resource :session
   resources :passwords, param: :token

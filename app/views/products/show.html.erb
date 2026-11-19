@@ -19,6 +19,8 @@
     <p class="mb-4">
       <% if @product.stock.positive? %>
         <span class="pill-tag pill-tag--muted">Stok: <%= @product.stock %></span>
+        
+        <%= button_to "Tambah ke Keranjang", cart_items_path(product_id: @product.id), class: "btn btn-ink" %>
       <% else %>
         <span class="pill-tag pill-tag--danger">Stok habis</span>
       <% end %>
