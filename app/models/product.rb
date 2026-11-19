@@ -5,7 +5,7 @@ class Product < ApplicationRecord
   validates :stock,   numericality: { greater_than_or_equal_to: 0 }
 
   has_many :cart_items, dependent: :destroy
-
+  has_many :order_items, dependent: :restrict_with_error
   # asosiation untuk menghubungkan produk dengan kategori. Setiap produk dapat memiliki satu kategori, dan jika kategori dihapus, produk yang terkait akan tetap ada tetapi kolom category_id pada produk akan diatur menjadi null.
   belongs_to :category, optional: true
 

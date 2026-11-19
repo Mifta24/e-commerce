@@ -52,6 +52,8 @@ class ApplicationController < ActionController::Base
       end
     end
 
+  end
+
   def require_admin
     redirect_to root_path, alert: "Anda tidak punya akses." unless admin?
   end
