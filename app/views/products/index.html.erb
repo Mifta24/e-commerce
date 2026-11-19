@@ -4,14 +4,27 @@
   <div>
     <p class="eyebrow mb-1"><%= pluralize(@products.size, "produk", plural: "produk") %></p>
     <h1 class="section-title"><strong>Produk</strong><%= " · #{@selected_category.name}" if @selected_category %></h1>
+    <% if params[:q].present? %>
+  <p class="text-body-secondary mb-0">
+    Hasil untuk “<%= params[:q] %>” ·
+    <%= link_to "Hapus pencarian", products_path(category: @selected_category&.id) %>
+  </p>
+<% end %>
+
+<% if params[:q].present? %>
+  <p>Tidak ada produk yang cocok dengan “<%= params[:q] %>”.</p>
+<% else %>
+  <p>Belum ada produk<%= " di kategori ini" if @selected_category %>.</p>
+<% end %>
+
   </div>
   <!-- <%= link_to new_product_path, class: "btn btn-ink" do %><i class="bi bi-plus-lg me-1"></i>Tambah Produk<% end %> -->
 </div>
 
 <div class="d-flex flex-wrap gap-2 mb-4">
-  <%= link_to "Semua", products_path, class: "filter-pill #{'active' unless @selected_category}" %>
+  <%= link_to "Semua", products_path(q: params[:q]), class: "filter-pill #{'active' unless @selected_category}" %>
   <% @categories.each do |category| %>
-    <%= link_to category.name, products_path(category: category.id),
+    <%= link_to category.name, products_path(category: category.id, q: params[:q]),
           class: "filter-pill #{'active' if category == @selected_category}" %>
   <% end %>
 </div>

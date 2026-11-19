@@ -10,6 +10,7 @@ class ProductsController < ApplicationController
     @selected_category = @categories.find_by(id: params[:category])
     @products = Product.order(created_at: :desc)
     @products = @products.where(category: @selected_category) if @selected_category
+    @products = @products.search(params[:q]).order(created_at: :desc)
   end
 
   def show

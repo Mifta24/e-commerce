@@ -14,4 +14,12 @@ class Product < ApplicationRecord
   def self.top_of_the_month
     where.not(description: [ nil, "" ]).order(created_at: :desc).first || order(created_at: :desc).first
   end
+
+  def self.search(keyword)
+    retrun all if keyword.blank?
+
+    pola="%#{keyword.downcase}%"
+    where("name ILIKE :q OR description ILIKE :q", q: pola)
+  end
+
 end
