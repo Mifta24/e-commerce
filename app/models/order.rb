@@ -64,4 +64,44 @@ class Order < ApplicationRecord
     created_at + Rails.configuration.x.payment.deadline_hours.hours
   end
 
+  # --- Aksi admin ---------------------------------------------------------
+  # Semua method di bawah mengembalikan true kalau berhasil, false kalau
+  # status pesanan saat ini tidak mengizinkan aksinya.
+
+  # paid -> shipped
+  def ship
+    return false unless paid?
+    shipped!
+  end
+
+  # shipped -> completed
+  def complete
+    return false unless shipped?
+    completed!
+  end
+
+  # pending / paid -> canceled, stok dikembalikan
+  def cancel
+    hasil = false
+
+    # with_lock: kunci baris pesanan ini, supaya dua admin yang menekan
+    # "Batalkan" bersamaan tidak mengembalikan stok dua kali
+    with_lock do
+      if pending? || paid?
+        order_items.includes(:product).order(:product_id).each do |item|
+          product = item.product
+          product.lock! #kunci supaya produk tidak diubah admin lain bersamaan
+          product.update!(stock: product.stock + item.quantity)
+        end
+
+        # bukti yang belum diperiksa ikut ditolak supaya tidak menggantung
+        payments.submitted.each { |payment| payment.reject!("Pesanan dibatalkan") }
+
+        canceled!
+        hasil = true
+      end
+    end
+
+    hasil
+  end
 end

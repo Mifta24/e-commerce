@@ -49,6 +49,13 @@
 
       <% if Current.user.admin? %>
         <li><hr class="dropdown-divider"></li>
+        <% menunggu = Payment.submitted.count %>
+        <li>
+          <%= link_to admin_orders_path, class: "dropdown-item d-flex justify-content-between align-items-center" do %>
+            Kelola Pesanan
+            <% if menunggu > 0 %><span class="badge text-bg-danger ms-3"><%= menunggu %></span><% end %>
+          <% end %>
+        </li>
         <li><%= link_to "Kelola Produk", products_path, class: "dropdown-item" %></li>
         <li><%= link_to "Kelola Kategori", categories_path, class: "dropdown-item" %></li>
       <% end %>

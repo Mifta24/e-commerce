@@ -1,0 +1,111 @@
+<% content_for :title, "Pesanan ##{@order.id} | Admin" %>
+
+<p><%= link_to "← Semua pesanan", admin_orders_path, class: "btn-text" %></p>
+
+<div class="page-header">
+  <div>
+    <p class="eyebrow mb-1">Admin</p>
+    <h1 class="section-title"><strong>Pesanan #<%= @order.id %></strong></h1>
+  </div>
+  <div class="fs-5"><%= order_status_badge(@order) %></div>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-12 col-md-6">
+    <h2 class="h5">Pelanggan</h2>
+    <p>
+      <%= @order.user.name %><br>
+      <%= @order.user.email_address %><br>
+      <%= @order.user.phone.presence || "-" %>
+    </p>
+  </div>
+  <div class="col-12 col-md-6">
+    <h2 class="h5">Dikirim ke</h2>
+    <p>
+      <%= @order.recipient_name %> (<%= @order.phone %>)<br>
+      <%= @order.street %><br>
+      <%= @order.city %>, <%= @order.province %> <%= @order.postal_code %>
+    </p>
+  </div>
+</div>
+
+<h2 class="h5">Barang</h2>
+<table class="table align-middle">
+  <thead>
+    <tr>
+      <th>Produk</th>
+      <th>Harga</th>
+      <th>Jumlah</th>
+      <th>Subtotal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @order.order_items.each do |item| %>
+      <tr>
+        <td><%= item.product_name %></td>
+        <td><%= rupiah(item.unit_price) %></td>
+        <td><%= item.quantity %></td>
+        <td><%= rupiah(item.subtotal) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<p class="fs-5"><strong>Total: <%= rupiah(@order.total) %></strong></p>
+
+<%# ---------- Tindakan ---------- %>
+<div class="d-flex flex-wrap gap-2 my-4">
+  <% if @order.paid? %>
+    <%= button_to "Tandai dikirim", ship_admin_order_path(@order), method: :patch, class: "btn btn-ink" %>
+  <% elsif @order.shipped? %>
+    <%= button_to "Tandai selesai", complete_admin_order_path(@order), method: :patch, class: "btn btn-ink" %>
+  <% end %>
+
+  <% if @order.pending? || @order.paid? %>
+    <%= button_to "Batalkan pesanan", cancel_admin_order_path(@order), method: :patch,
+          class: "btn btn-outline-danger rounded-pill px-4",
+          form: { data: { turbo_confirm: "Batalkan pesanan ini dan kembalikan stok?" } } %>
+  <% end %>
+</div>
+
+<%# ---------- Pembayaran ---------- %>
+<h2 class="h4 mt-5">Pembayaran</h2>
+
+<% if @payments.empty? %>
+  <p class="text-body-secondary">Belum ada bukti pembayaran.</p>
+<% end %>
+
+<% @payments.each do |payment| %>
+  <div class="form-card mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <strong><%= rupiah(payment.amount) %></strong>
+      <%= payment_status_badge(payment) %>
+    </div>
+
+    <p class="mb-2">
+      Pengirim: <%= payment.sender_name %> (<%= payment.sender_bank %>)<br>
+      Dikirim: <%= payment.created_at.strftime("%d-%m-%Y %H:%M") %>
+      <% if payment.note.present? %><br>Catatan: <%= payment.note %><% end %>
+    </p>
+
+    <% if payment.proof.attached? %>
+      <%= link_to url_for(payment.proof), target: "_blank", rel: "noopener" do %>
+        <%= image_tag payment.proof, alt: "Bukti transfer", style: "max-width: 14rem; border-radius: 1rem;" %>
+      <% end %>
+    <% end %>
+
+    <% if payment.submitted? && @order.pending? %>
+      <p class="small text-body-secondary mt-3 mb-2">
+        Cocokkan nominal dan nama pengirim dengan mutasi rekening sebelum mengonfirmasi.
+      </p>
+      <div class="d-flex flex-wrap align-items-start gap-3">
+        <%= button_to "Konfirmasi pembayaran", confirm_admin_payment_path(payment),
+              method: :patch, class: "btn btn-ink" %>
+
+        <%= form_with url: reject_admin_payment_path(payment), method: :patch, class: "d-flex gap-2" do |form| %>
+          <%= form.text_field :note, class: "form-control", required: true, placeholder: "Alasan penolakan" %>
+          <%= form.submit "Tolak", class: "btn btn-outline-danger" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

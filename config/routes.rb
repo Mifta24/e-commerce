@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
   resources :categories
   resources :orders, only: %i[index show new create] do 
-    resources :payments, only: %i[create show]
+    resources :payments, only: :create
   end
   resource :profile, only: %i[show edit update]
   resource :password_change, only: %i[edit update]
@@ -19,6 +19,24 @@ Rails.application.routes.draw do
 
     resources :products
     resource :registration, only: %i[new create]
+
+  # Halaman admin: semua URL diawali /admin dan memakai controller di app/controllers/admin/
+  namespace :admin do
+    resources :orders, only: %i[index show] do
+      member do # member block untuk menambahkan route yang memerlukan ID pesanan
+        patch :ship
+        patch :complete
+        patch :cancel
+      end
+    end
+
+    resources :payments, only: [] do
+      member do
+        patch :confirm
+        patch :reject
+      end
+    end
+  end
 
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
