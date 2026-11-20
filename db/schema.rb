@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_19_080133) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_19_093420) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -111,6 +111,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_19_080133) do
     t.check_constraint "total >= 0", name: "orders_total_non_negative"
   end
 
+  create_table "payments", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.integer "amount", null: false
+    t.string "sender_name", null: false
+    t.string "sender_bank", null: false
+    t.integer "status", default: 0, null: false
+    t.text "note"
+    t.datetime "reviewed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_payments_on_order_id"
+    t.index ["order_id"], name: "index_payments_one_active_per_order", unique: true, where: "(status = ANY (ARRAY[0, 1]))"
+    t.check_constraint "amount >= 0", name: "payments_amount_not_negative"
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -151,6 +166,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_19_080133) do
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "users"
+  add_foreign_key "payments", "orders"
   add_foreign_key "products", "categories"
   add_foreign_key "sessions", "users"
 end

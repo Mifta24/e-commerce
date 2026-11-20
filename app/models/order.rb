@@ -1,6 +1,7 @@
 class Order < ApplicationRecord
   belongs_to :user
   has_many :order_items, dependent: :destroy
+  has_many :payments, dependent: :destroy
 
   enum :status, { pending: 0, paid: 1, shipped: 2, completed: 3, canceled: 4 }
 
@@ -47,4 +48,20 @@ class Order < ApplicationRecord
 
     order
   end
+
+  # pemabayran terbaru bisa nil jika belum ada pembayaran
+  def latest_payment
+    payments.order(:created_at, :id).last
+  end
+
+  # true jika user belum bayar dan belum ada pembayaran yang diterima bisa unggah bukti pembayaran, atau jika user sudah bayar tapi pembayaran ditolak bisa unggah bukti pembayaran lagi
+  def awaiting_payment?
+   pending? && (  latest_payment.nil? || latest_payment.rejected? )
+  end
+
+    # batas waktu pembayaran (hanya informasi; belum ada pembatalan otomatis)
+  def payment_deadline
+    created_at + Rails.configuration.x.payment.deadline_hours.hours
+  end
+
 end

@@ -31,4 +31,5 @@
 </table>
 
 <p><strong>Total: <%= rupiah(@order.total) %></strong></p>
+<%= render "orders/payment", order: @order %> 
 <%= link_to "Kembali ke pesanan saya", orders_path %>

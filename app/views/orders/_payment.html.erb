@@ -1,0 +1,57 @@
+<% payment = order.latest_payment %>
+<% info = Rails.configuration.x.payment %>
+
+<h2>Pembayaran</h2>
+
+<% if order.canceled? %>
+  <p class="text-body-secondary">Pesanan ini sudah dibatalkan.</p>
+
+<% elsif order.awaiting_payment? %>
+  <% if payment&.rejected? %>
+    <div class="alert alert-danger">
+      Bukti pembayaran sebelumnya ditolak: <strong><%= payment.note %></strong>.
+      Silakan unggah bukti yang benar.
+    </div>
+  <% end %>
+
+  <div class="form-card mb-4">
+    <p>Transfer tepat sebesar <strong><%= rupiah(order.total) %></strong> ke rekening berikut:</p>
+    <dl class="row mb-0">
+      <dt class="col-sm-4">Bank</dt>
+      <dd class="col-sm-8"><%= info.bank_name %></dd>
+      <dt class="col-sm-4">No. rekening</dt>
+      <dd class="col-sm-8"><%= info.account_number %></dd>
+      <dt class="col-sm-4">Atas nama</dt>
+      <dd class="col-sm-8"><%= info.account_holder %></dd>
+    </dl>
+    <p class="mt-3 mb-0 text-body-secondary small">
+      Batas pembayaran: <%= order.payment_deadline.strftime("%d-%m-%Y %H:%M") %>
+    </p>
+  </div>
+
+  <h3 class="h5">Kirim bukti transfer</h3>
+  <%= form_with model: Payment.new, url: order_payments_path(order), class: "form-card" do |form| %>
+    <div class="mb-3">
+      <%= form.label :sender_name, "Nama pemilik rekening pengirim", class: "form-label" %>
+      <%= form.text_field :sender_name, class: "form-control", required: true %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :sender_bank, "Bank pengirim", class: "form-label" %>
+      <%= form.text_field :sender_bank, class: "form-control", required: true %>
+    </div>
+    <div class="mb-4">
+      <%= form.label :proof, "Bukti transfer (JPG, PNG, atau WebP, maksimal 5 MB)", class: "form-label" %>
+      <%= form.file_field :proof, accept: "image/png,image/jpeg,image/webp", class: "form-control", required: true %>
+    </div>
+    <%= form.submit "Kirim bukti pembayaran", class: "btn btn-ink" %>
+  <% end %>
+
+<% elsif payment&.submitted? %>
+  <div class="alert alert-warning">
+    Bukti pembayaran sudah kami terima dan sedang diperiksa admin.
+  </div>
+  <%= image_tag payment.proof, alt: "Bukti transfer", style: "max-width: 14rem; border-radius: 1rem;" %>
+
+<% else %>
+  <div class="alert alert-success">Pembayaran sudah dikonfirmasi. Terima kasih!</div>
+<% end %>

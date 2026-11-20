@@ -1,11 +1,14 @@
 Rails.application.routes.draw do
+  
   resource :cart, only: :show
-  resources  :cart_items, only: %i[create update destroy]
+  resources :cart_items, only: %i[create update destroy]
   resources :addresses
   resource :session
   resources :passwords, param: :token
   resources :categories
-  resources :orders, only:%i[index show new create]
+  resources :orders, only: %i[index show new create] do 
+    resources :payments, only: %i[create show]
+  end
   resource :profile, only: %i[show edit update]
   resource :password_change, only: %i[edit update]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
