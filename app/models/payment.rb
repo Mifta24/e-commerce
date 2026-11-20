@@ -3,6 +3,7 @@ class Payment < ApplicationRecord
   has_one_attached :proof
 
   enum :status, { submitted: 0, confirmed: 1, rejected: 2 }
+  BANKS = ["BCA", "BNI", "BRI", "Mandiri", "CIMB Niaga", "Permata", "Danamon", "Bank Jago", "Bank Syariah Indonesia", "Bank Muamalat", "Bank Mega", "Bank Panin", "Bank OCBC NISP", "Bank Maybank", "Bank Commonwealth", "Bank UOB Indonesia"]
 
   validates :amount, numericality: { only_integer: true, greater_than: 0 }
   validates :sender_name, :sender_bank, presence: true

@@ -36,8 +36,9 @@
       <%= form.text_field :sender_name, class: "form-control", required: true %>
     </div>
     <div class="mb-3">
-      <%= form.label :sender_bank, "Bank pengirim", class: "form-label" %>
-      <%= form.text_field :sender_bank, class: "form-control", required: true %>
+     <%= form.select :sender_bank, Payment::BANKS,
+      { include_blank: "-- Pilih bank --" },
+      class: "form-select", required: true %>
     </div>
     <div class="mb-4">
       <%= form.label :proof, "Bukti transfer (JPG, PNG, atau WebP, maksimal 5 MB)", class: "form-label" %>
