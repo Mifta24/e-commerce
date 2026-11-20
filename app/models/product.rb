@@ -7,16 +7,20 @@ class Product < ApplicationRecord
 
   has_many :cart_items, dependent: :destroy
   has_many :order_items, dependent: :restrict_with_error
+  has_many :favorites, dependent: :destroy
   # asosiation untuk menghubungkan produk dengan kategori. Setiap produk dapat memiliki satu kategori, dan jika kategori dihapus, produk yang terkait akan tetap ada tetapi kolom category_id pada produk akan diatur menjadi null.
   belongs_to :category, optional: true
   has_one_attached :image
 
-  # Produk unggulan bulan ini. Belum ada data penjualan, jadi sementara diambil produk terbaru yang punya deskripsi
-  # (atau produk terbaru kalau tidak ada yang punya deskripsi). Ganti logika ini kalau data pesanan sudah ada.
+ 
   def self.top_of_the_month
-    where.not(description: [ nil, "" ]).order(created_at: :desc).first || order(created_at: :desc).first
-  end
+    # count order pada product
+    # order_items.count
+    counts = OrderItem.group(:product_id).count
+    # ambil produk dengan order terbanyak, kalau tidak ada yang punya order ambil produk terbaru yang punya deskripsi, kalau tidak ada yang punya deskripsi ambil produk terbaru
+    where(id: counts.keys).max_by { |product| counts[product.id] } || where.not(description: [nil, ""]).order(created_at: :desc).first || order(created_at: :desc).first
 
+  end
   def self.search(keyword)
     return all if keyword.blank?
 

@@ -4,6 +4,9 @@ class User < ApplicationRecord
   has_many :addresses, dependent: :destroy
   has_one :cart, dependent: :destroy
   has_many :orders, dependent: :restrict_with_error
+  has_many :favorites, dependent: :destroy
+  # menambahkan relasi many-to-many antara User dan Product melalui model Favorite. Dengan ini, kita bisa mengakses produk favorit pengguna melalui user.favorite_products
+  has_many :favorite_products, through: :favorites, source: :product 
   validates :email_address, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :name, presence: true
   # validasi untuk memastikan bahwa password memiliki panjang minimal 6 karakter, tetapi hanya diterapkan saat membuat pengguna baru atau saat mengubah password. Jika password tidak diisi, validasi ini diabaikan.

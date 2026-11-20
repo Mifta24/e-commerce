@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  
+  resources :favorites, only: %i[index create destroy]
   resource :cart, only: :show
   resources :cart_items, only: %i[create update destroy]
   resources :addresses
