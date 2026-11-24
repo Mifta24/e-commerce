@@ -136,3 +136,14 @@ body { letter-spacing: -0.01em; }
 }
 .fav-btn:hover { transform: scale(1.1); color: #dc3545; }
 .fav-btn--on { color: #dc3545; }
+
+/* ---------- Sidebar admin ---------- */
+.admin-nav {
+  --bs-nav-link-color: var(--ink);
+  --bs-nav-link-hover-color: var(--ink);
+  --bs-nav-pills-border-radius: 1rem;
+  --bs-nav-pills-link-active-bg: var(--ink);
+  --bs-nav-pills-link-active-color: #fff;
+}
+.admin-nav .nav-link { font-size: .95rem; }
+.admin-nav .nav-link:not(.active):hover { background: #f4f4f8; }

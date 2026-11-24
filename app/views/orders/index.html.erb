@@ -19,7 +19,7 @@
         <tr>
           <td>#<%= order.id %></td>
           <td><%= order.created_at.strftime("%d-%m-%Y %H:%M") %></td>
-          <td><%= order.status.humanize %></td>
+          <td><%= order_status_badge(order) %></td>
           <td><%= rupiah(order.total) %></td>
           <td><%= link_to "Lihat", order_path(order) %></td>
         </tr>

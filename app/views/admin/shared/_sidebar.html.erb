@@ -1,0 +1,7 @@
+<nav class="admin-nav nav nav-pills flex-row flex-wrap flex-lg-column gap-1 mb-2" aria-label="Menu admin">
+  <%= admin_nav_link "Dasbor", "speedometer2", admin_root_path,
+        aktif: controller_path == "admin/dashboard" %>
+  <%= admin_nav_link "Pesanan", "receipt", admin_orders_path,
+        aktif: controller_path == "admin/orders", badge: Payment.submitted.count %>
+  <%= admin_nav_link "Lihat toko", "shop", root_path, aktif: false %>
+</nav>

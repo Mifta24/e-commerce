@@ -1,0 +1,14 @@
+<%# Layout bersarang: membungkus halaman admin dengan sidebar, lalu menyerahkannya ke layout utama. %>
+<% content_for :content do %>
+  <div class="row g-4">
+    <aside class="col-12 col-lg-2">
+      <p class="eyebrow mb-2">Panel admin</p>
+      <%= render "admin/shared/sidebar" %>
+    </aside>
+    <section class="col-12 col-lg-10">
+      <%= yield %>
+    </section>
+  </div>
+<% end %>
+
+<%= render template: "layouts/application" %>
