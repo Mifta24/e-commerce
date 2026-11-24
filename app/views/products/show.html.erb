@@ -29,6 +29,10 @@
         <span class="pill-tag pill-tag--danger">Stok habis</span>
       <% end %>
     </p>
+    <div class="fav-wrap d-flex align-items-center gap-2 mb-4">
+      <%= render "favorites/button", product: @product %>
+      <span class="small text-body-secondary">Simpan ke favorit</span>
+    </div>
 
     <% if @product.description.present? %>
       <p class="text-body-secondary mb-4"><%= simple_format(@product.description) %></p>

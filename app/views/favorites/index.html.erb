@@ -1,0 +1,23 @@
+<% content_for :title, "Favorit Saya | E Commerce" %>
+
+<div class="page-header">
+  <div>
+    <p class="eyebrow mb-1">Wishlist</p>
+    <h1 class="section-title"><strong>Favorit Saya</strong></h1>
+  </div>
+</div>
+
+<% if @products.any? %>
+  <div class="row g-4">
+    <% @products.each do |product| %>
+      <div class="col-6 col-md-4 col-lg-3">
+        <%= render "products/card", product: product %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="text-center text-body-secondary py-5">
+    <p>Belum ada produk favorit.</p>
+    <%= link_to "Jelajahi produk", products_path, class: "btn btn-ink" %>
+  </div>
+<% end %>

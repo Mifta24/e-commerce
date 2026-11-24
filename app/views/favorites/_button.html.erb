@@ -1,0 +1,21 @@
+<%# Tombol hati. Pakai: render "favorites/button", product: product %>
+<% favorite = favorites_by_product[product.id] %>
+
+<% if favorite %>
+  <%= button_to favorite_path(favorite), method: :delete, class: "fav-btn fav-btn--on",
+        title: "Hapus dari favorit", aria: { label: "Hapus dari favorit" },
+        form: { data: { turbo_frame: "_top" } } do %>
+    <i class="bi bi-heart-fill"></i>
+  <% end %>
+<% elsif current_user %>
+  <%= button_to favorites_path(product_id: product.id), class: "fav-btn",
+        title: "Tambah ke favorit", aria: { label: "Tambah ke favorit" },
+        form: { data: { turbo_frame: "_top" } } do %>
+    <i class="bi bi-heart"></i>
+  <% end %>
+<% else %>
+  <%= link_to new_session_path, class: "fav-btn", title: "Masuk untuk menyimpan favorit",
+        aria: { label: "Masuk untuk menyimpan favorit" } do %>
+    <i class="bi bi-heart"></i>
+  <% end %>
+<% end %>

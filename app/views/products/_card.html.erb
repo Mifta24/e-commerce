@@ -1,4 +1,7 @@
 <div class="pick">
+  <div class="fav-slot">
+    <%= render "favorites/button", product: product %>
+  </div>
  <div class="pick-image tile--<%= tone_for(product) %>">
   <% if product.image.attached? %>
     <%= image_tag product.image, alt: product.name, class: "product-img" %>

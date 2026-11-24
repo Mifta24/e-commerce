@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
-  helper_method :current_user, :admin?, :current_cart
+  helper_method :current_user, :admin?, :current_cart, :favorites_by_product
 
   private
 
@@ -52,6 +52,10 @@ class ApplicationController < ActionController::Base
       end
     end
 
+  end
+
+  def favorites_by_product
+    @favorites_by_product ||= current_user ? current_user.favorites.index_by(&:product_id) : {}
   end
 
   def require_admin

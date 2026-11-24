@@ -121,3 +121,18 @@ body { letter-spacing: -0.01em; }
 }
 .pagination .page-link { border-color: var(--line); min-width: 2.5rem; text-align: center; }
 .pagination .page-item:not(:first-child) .page-link { margin-left: 0; }
+
+/* Tombol hati (favorit) */
+.pick { position: relative; }
+.fav-slot { position: absolute; top: .6rem; right: .6rem; z-index: 2; }
+.fav-slot form, .fav-wrap form { margin: 0; }
+.fav-btn {
+  width: 2.25rem; height: 2.25rem; padding: 0;
+  display: grid; place-items: center;
+  border: 1px solid rgba(0, 0, 0, .08); border-radius: 50%;
+  background: rgba(255, 255, 255, .92); color: #444;
+  text-decoration: none; cursor: pointer;
+  transition: transform .15s ease, color .15s ease;
+}
+.fav-btn:hover { transform: scale(1.1); color: #dc3545; }
+.fav-btn--on { color: #dc3545; }
