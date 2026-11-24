@@ -31,6 +31,12 @@ def self.top_of_the_month
     order(created_at: :desc).first
 end
 
+  def self.search(keyword)
+    return all if keyword.blank?
+
+    pola = "%#{keyword.downcase}%"
+    where("name ILIKE :q OR description ILIKE :q", q: pola)
+  end
 
   private
 
