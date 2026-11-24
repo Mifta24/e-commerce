@@ -12,3 +12,10 @@ module AdminHelper
     end
   end
 end
+
+  # Teks konfirmasi sebelum menghapus kategori. Produk di dalamnya tidak ikut terhapus.
+  def pesan_hapus_kategori(category)
+    pesan = "Yakin hapus kategori #{category.name}?"
+    pesan += " #{category.jumlah_produk} produk di dalamnya akan jadi tanpa kategori." if category.jumlah_produk > 0
+    pesan
+  end

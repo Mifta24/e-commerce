@@ -9,7 +9,8 @@
       <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
         <li class="nav-item"><%= link_to "Home", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %></li>
         <li class="nav-item"><%= link_to "Produk", products_path, class: "nav-link #{'active' if controller_path == 'products'}" %></li>
-        <li class="nav-item"><%= link_to "Kategori", categories_path, class: "nav-link #{'active' if controller_name == 'categories'}" %></li>
+       <li class="nav-item"><%= link_to "Kategori", categories_path, class: "nav-link #{'active' if controller_path == 'categories'}" %></li>
+
       </ul>
       <%# Ikon di kanan masih placeholder: pencarian, login, wishlist, dan keranjang belum ada fiturnya. %>
       <div class="nav-icons d-flex align-items-center gap-1">
@@ -67,7 +68,8 @@
         </li>
         <li><%= link_to "Kelola Produk", admin_products_path, class: "dropdown-item" %></li>
 
-        <li><%= link_to "Kelola Kategori", categories_path, class: "dropdown-item" %></li>
+        <li><%= link_to "Kelola Kategori", admin_categories_path, class: "dropdown-item" %></li>
+
       <% end %>
 
       <li><hr class="dropdown-divider"></li>

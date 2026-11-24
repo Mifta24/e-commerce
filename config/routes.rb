@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :addresses
   resource :session
   resources :passwords, param: :token
-  resources :categories
+  resources :categories , only: %i[index show]
   resources :orders, only: %i[index show new create] do  
     member do
       patch :cancel
@@ -22,11 +22,12 @@ Rails.application.routes.draw do
 
     resources :products, only: %i[index show]
     resource :registration, only: %i[new create]
+    
 
   # Halaman admin: semua URL diawali /admin dan memakai controller di app/controllers/admin/
   namespace :admin do
     root "dashboard#show"
-
+    resources :categories, except: :show  # menyediakan semua route kecuali show, karena admin tidak perlu melihat detail kategori
     resources :products, except: :show  # menyediakan semua route kecuali show, karena admin tidak perlu melihat detail produk
 
     resources :orders, only: %i[index show] do

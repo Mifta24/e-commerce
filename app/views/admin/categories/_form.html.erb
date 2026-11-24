@@ -1,4 +1,5 @@
-<%= form_with(model: category, class: "form-card") do |form| %>
+<%= form_with(model: [:admin, category], class: "form-card") do |form| %>
+
   <%= render "shared/form_errors", record: category %>
 
   <div class="mb-4">
@@ -8,6 +9,7 @@
 
   <div class="d-flex align-items-center gap-3">
     <%= form.submit(category.new_record? ? "Simpan" : "Simpan Perubahan", class: "btn btn-ink") %>
-    <%= link_to "Batal", (category.persisted? ? category : categories_path), class: "btn-text" %>
+    <%= link_to "Batal", admin_categories_path, class: "btn-text" %>
+
   </div>
 <% end %>
