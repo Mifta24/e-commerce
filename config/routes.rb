@@ -20,12 +20,14 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-    resources :products
+    resources :products, only: %i[index show]
     resource :registration, only: %i[new create]
 
   # Halaman admin: semua URL diawali /admin dan memakai controller di app/controllers/admin/
   namespace :admin do
     root "dashboard#show"
+
+    resources :products, except: :show  # menyediakan semua route kecuali show, karena admin tidak perlu melihat detail produk
 
     resources :orders, only: %i[index show] do
       member do # member block untuk menambahkan route yang memerlukan ID pesanan

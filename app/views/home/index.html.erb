@@ -32,7 +32,7 @@
   <% else %>
     <div class="text-center text-body-secondary py-5">
       <p>Belum ada produk untuk ditampilkan.</p>
-      <%= link_to "Tambah Produk", new_product_path, class: "btn btn-ink" %>
+     <% if admin? %><%= link_to "Tambah Produk", new_admin_product_path, class: "btn btn-ink" %><% end %>
     </div>
   <% end %>
 </section>

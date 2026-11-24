@@ -61,7 +61,7 @@
   <div class="col-12 col-lg-6">
     <h2 class="h5">
       Stok menipis
-      <% if @stok_habis > 0 %><span class="badge text-bg-danger ms-2"><%= @stok_habis %> produk habis</span><% end %>
+      <% if @stok_habis > 0 %><%= link_to "#{@stok_habis} produk habis", admin_products_path(stok: "habis"), class: "badge text-bg-danger ms-2 text-decoration-none" %><% end %>
     </h2>
     <% if @stok_menipis.empty? %>
       <p class="text-body-secondary">Tidak ada produk dengan stok menipis.</p>
@@ -72,7 +72,8 @@
             <%= product.name %>
             <span>
               <span class="badge text-bg-warning">sisa <%= product.stock %></span>
-              <%= link_to "Ubah", edit_product_path(product), class: "ms-2 small" %>
+              <%= link_to "Ubah", edit_admin_product_path(product), class: "ms-2 small" %>
+
             </span>
           </li>
         <% end %>

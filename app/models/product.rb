@@ -11,10 +11,11 @@ class Product < ApplicationRecord
   # asosiation untuk menghubungkan produk dengan kategori. Setiap produk dapat memiliki satu kategori, dan jika kategori dihapus, produk yang terkait akan tetap ada tetapi kolom category_id pada produk akan diatur menjadi null.
   belongs_to :category, optional: true
   has_one_attached :image
+  # scope digunakan untuk membuat query yang dapat digunakan kembali. Dalam hal ini, scope :menipis digunakan untuk mengambil produk dengan stok antara 1 hingga LOW_STOCK, sedangkan scope :habis digunakan untuk mengambil produk dengan stok 0.
   # stok dianggap menipis kalau tinggal segini atau kurang (tapi belum habis)
   LOW_STOCK = 5
   scope :menipis, -> { where(stock: 1..LOW_STOCK) }
-
+  scope :habis, -> { where(stock: 0) }
  
 # Produk terlaris 30 hari terakhir, dihitung dari jumlah barang (quantity)
 # pada pesanan yang sudah dibayar. Kalau belum ada penjualan, ambil produk terbaru.

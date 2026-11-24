@@ -1,4 +1,4 @@
-<%= form_with model: product, class: "form-card" do |form| %>
+<%= form_with model: [:admin, product], class: "form-card" do |form| %>
   <%= render "shared/form_errors", record: product %>
 <div class="mb-3">
   <%= form.label :image, "Gambar", class: "form-label" %>
@@ -39,6 +39,7 @@
   </div>
   <div class="d-flex align-items-center gap-3">
     <%= form.submit(product.new_record? ? "Simpan" : "Simpan Perubahan", class: "btn btn-ink") %>
-    <%= link_to "Batal", (product.persisted? ? product : products_path), class: "btn-text" %>
+   <%= link_to "Batal", admin_products_path, class: "btn-text" %>
+
   </div>
 <% end %>
