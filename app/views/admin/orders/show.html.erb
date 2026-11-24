@@ -52,11 +52,22 @@
 </table>
 <p class="fs-5"><strong>Total: <%= rupiah(@order.total) %></strong></p>
 
+<% if @order.shipped_at %>
+  <p class="mb-0">
+    <strong>Pengiriman:</strong> <%= @order.courier %> &middot; Resi <%= @order.tracking_number %>
+    (dikirim <%= @order.shipped_at.strftime("%d-%m-%Y %H:%M") %>)
+  </p>
+<% end %>
+
 <%# ---------- Tindakan ---------- %>
 <div class="d-flex flex-wrap gap-2 my-4">
   <% if @order.paid? %>
-    <%= button_to "Tandai dikirim", ship_admin_order_path(@order), method: :patch, class: "btn btn-ink" %>
-  <% elsif @order.shipped? %>
+  <%= form_with url: ship_admin_order_path(@order), method: :patch, class: "d-flex flex-wrap gap-2 align-items-start" do |form| %>
+    <%= form.select :courier, Order::COURIERS, { include_blank: "-- Pilih kurir --" }, class: "form-select w-auto", required: true %>
+    <%= form.text_field :tracking_number, class: "form-control w-auto", placeholder: "Nomor resi", required: true %>
+    <%= form.submit "Tandai dikirim", class: "btn btn-ink" %>
+  <% end %>
+<% elsif @order.shipped? %>
     <%= button_to "Tandai selesai", complete_admin_order_path(@order), method: :patch, class: "btn btn-ink" %>
   <% end %>
 

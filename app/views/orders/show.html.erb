@@ -1,5 +1,25 @@
-<h1>Pesanan #<%= @order.id %></h1>
-<p>Status: <strong><%= @order.status.humanize %></strong></p>
+<% content_for :title, "Pesanan ##{@order.id} | E Commerce" %>
+
+<p><%= link_to "← Pesanan saya", orders_path, class: "btn-text" %></p>
+
+<div class="page-header">
+  <div>
+    <p class="eyebrow mb-1">Pesanan</p>
+    <h1 class="section-title"><strong>#<%= @order.id %></strong></h1>
+  </div>
+  <div class="fs-5"><%= order_status_badge(@order) %></div>
+</div>
+
+<% if @order.shipped_at %>
+  <div class="form-card mb-4">
+    <h2 class="h5">Pengiriman</h2>
+    <p class="mb-0">
+      Kurir <strong><%= @order.courier %></strong> &middot; No. resi <strong><%= @order.tracking_number %></strong><br>
+      <span class="text-body-secondary small">Dikirim <%= @order.shipped_at.strftime("%d-%m-%Y %H:%M") %></span>
+    </p>
+  </div>
+<% end %>
+
 
 <h2>Dikirim ke</h2>
 <p>
@@ -31,5 +51,11 @@
 </table>
 
 <p><strong>Total: <%= rupiah(@order.total) %></strong></p>
-<%= render "orders/payment", order: @order %> 
-<%= link_to "Kembali ke pesanan saya", orders_path %>
+<%= render "orders/payment", order: @order %>
+
+<% if @order.awaiting_payment? %>
+  <%= button_to "Batalkan pesanan", cancel_order_path(@order), method: :patch,
+        class: "btn btn-outline-danger rounded-pill px-4 mt-4",
+        form: { data: { turbo_confirm: "Batalkan pesanan ini?" } } %>
+<% end %>
+

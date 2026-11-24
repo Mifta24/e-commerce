@@ -1,0 +1,106 @@
+<% content_for :title, "Dasbor | Admin" %>
+
+<div class="page-header">
+  <div>
+    <p class="eyebrow mb-1">Admin</p>
+    <h1 class="section-title"><strong>Dasbor</strong></h1>
+  </div>
+</div>
+
+<%# ---------- Angka ringkas ---------- %>
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="form-card h-100">
+      <div class="text-body-secondary small">Pendapatan (30 hari)</div>
+      <div class="fs-4 fw-semibold"><%= rupiah(@pendapatan) %></div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="form-card h-100">
+      <div class="text-body-secondary small">Pesanan dibayar (30 hari)</div>
+      <div class="fs-4 fw-semibold"><%= @jumlah_pesanan %></div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <%= link_to admin_orders_path(status: "pending"), class: "text-decoration-none text-reset" do %>
+      <div class="form-card h-100">
+        <div class="text-body-secondary small">Perlu diverifikasi</div>
+        <div class="fs-4 fw-semibold <%= 'text-danger' if @perlu_verifikasi > 0 %>"><%= @perlu_verifikasi %></div>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-6 col-lg-3">
+    <%= link_to admin_orders_path(status: "paid"), class: "text-decoration-none text-reset" do %>
+      <div class="form-card h-100">
+        <div class="text-body-secondary small">Perlu dikirim</div>
+        <div class="fs-4 fw-semibold <%= 'text-danger' if @perlu_dikirim > 0 %>"><%= @perlu_dikirim %></div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <%# ---------- Produk terlaris ---------- %>
+  <div class="col-12 col-lg-6">
+    <h2 class="h5">Produk terlaris (30 hari)</h2>
+    <% if @terlaris.empty? %>
+      <p class="text-body-secondary">Belum ada penjualan.</p>
+    <% else %>
+      <ol class="list-group list-group-numbered">
+        <% @terlaris.each do |product| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <%= link_to product.name, product_path(product), class: "me-auto ms-2" %>
+            <span class="badge text-bg-secondary"><%= product.terjual %> terjual</span>
+          </li>
+        <% end %>
+      </ol>
+    <% end %>
+  </div>
+
+  <%# ---------- Stok menipis ---------- %>
+  <div class="col-12 col-lg-6">
+    <h2 class="h5">
+      Stok menipis
+      <% if @stok_habis > 0 %><span class="badge text-bg-danger ms-2"><%= @stok_habis %> produk habis</span><% end %>
+    </h2>
+    <% if @stok_menipis.empty? %>
+      <p class="text-body-secondary">Tidak ada produk dengan stok menipis.</p>
+    <% else %>
+      <ul class="list-group">
+        <% @stok_menipis.each do |product| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <%= product.name %>
+            <span>
+              <span class="badge text-bg-warning">sisa <%= product.stock %></span>
+              <%= link_to "Ubah", edit_product_path(product), class: "ms-2 small" %>
+            </span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</div>
+
+<%# ---------- Pesanan terbaru ---------- %>
+<h2 class="h5">Pesanan terbaru</h2>
+<% if @pesanan_terbaru.empty? %>
+  <p class="text-body-secondary">Belum ada pesanan.</p>
+<% else %>
+  <table class="table align-middle">
+    <thead>
+      <tr><th>No.</th><th>Pelanggan</th><th>Status</th><th>Total</th><th></th></tr>
+    </thead>
+    <tbody>
+      <% @pesanan_terbaru.each do |order| %>
+        <tr>
+          <td>#<%= order.id %></td>
+          <td><%= order.user.name %></td>
+          <td><%= order_status_badge(order) %></td>
+          <td><%= rupiah(order.total) %></td>
+          <td><%= link_to "Lihat", admin_order_path(order) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= link_to "Semua pesanan →", admin_orders_path, class: "btn-text" %>
+<% end %>

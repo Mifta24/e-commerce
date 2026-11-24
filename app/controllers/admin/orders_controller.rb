@@ -14,12 +14,14 @@ class Admin::OrdersController < Admin::BaseController
   end
 
   def ship
-    if @order.ship
-      redirect_to admin_order_path(@order), notice: "Pesanan ditandai sudah dikirim."
-    else
-      redirect_to admin_order_path(@order), alert: "Hanya pesanan berstatus paid yang bisa dikirim."
-    end
+  if @order.ship(courier: params[:courier], tracking_number: params[:tracking_number])
+    redirect_to admin_order_path(@order), notice: "Pesanan ditandai sudah dikirim."
+  else
+    pesan = @order.errors.full_messages.to_sentence.presence || "Hanya pesanan berstatus paid yang bisa dikirim."
+    redirect_to admin_order_path(@order), alert: pesan
+   end
   end
+
 
   def complete
     if @order.complete

@@ -31,6 +31,18 @@ class OrdersController < ApplicationController
     end
   end
 
+  # Pelanggan hanya boleh membatalkan pesanan yang belum dibayar dan belum
+  # punya bukti bayar yang menunggu verifikasi.
+  def cancel
+    order = current_user.orders.find(params[:id])
+
+    if order.awaiting_payment? && order.cancel
+      redirect_to order_path(order), notice: "Pesanan dibatalkan."
+    else
+      redirect_to order_path(order), alert: "Pesanan ini tidak bisa dibatalkan."
+    end
+  end
+
   private
 
   def require_filled_cart

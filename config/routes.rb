@@ -6,7 +6,10 @@ Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
   resources :categories
-  resources :orders, only: %i[index show new create] do 
+  resources :orders, only: %i[index show new create] do  
+    member do
+      patch :cancel
+    end
     resources :payments, only: :create
   end
   resource :profile, only: %i[show edit update]
@@ -22,6 +25,8 @@ Rails.application.routes.draw do
 
   # Halaman admin: semua URL diawali /admin dan memakai controller di app/controllers/admin/
   namespace :admin do
+    root "dashboard#show"
+
     resources :orders, only: %i[index show] do
       member do # member block untuk menambahkan route yang memerlukan ID pesanan
         patch :ship

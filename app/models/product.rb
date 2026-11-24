@@ -11,6 +11,9 @@ class Product < ApplicationRecord
   # asosiation untuk menghubungkan produk dengan kategori. Setiap produk dapat memiliki satu kategori, dan jika kategori dihapus, produk yang terkait akan tetap ada tetapi kolom category_id pada produk akan diatur menjadi null.
   belongs_to :category, optional: true
   has_one_attached :image
+  # stok dianggap menipis kalau tinggal segini atau kurang (tapi belum habis)
+  LOW_STOCK = 5
+  scope :menipis, -> { where(stock: 1..LOW_STOCK) }
 
  
 # Produk terlaris 30 hari terakhir, dihitung dari jumlah barang (quantity)

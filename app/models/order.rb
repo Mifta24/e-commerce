@@ -4,6 +4,13 @@ class Order < ApplicationRecord
   has_many :payments, dependent: :destroy
 
   enum :status, { pending: 0, paid: 1, shipped: 2, completed: 3, canceled: 4 }
+  # konstanta untuk daftar kurir yang tersedia. Konstanta ini digunakan untuk membatasi pilihan kurir yang dapat dipilih saat mengirimkan pesanan. Dengan mendefinisikan daftar kurir sebagai konstanta, kita dapat dengan mudah mengelola dan memperbarui daftar kurir yang tersedia di seluruh aplikasi.
+  COURIERS = [ "JNE", "J&T Express", "SiCepat", "AnterAja", "Pos Indonesia", "Ninja Xpress" ].freeze
+
+  # Pesanan yang dianggap penjualan: sudah dibayar (paid, shipped, completed)
+  scope :laku, -> { where(status: %i[paid shipped completed]) }
+  # Pesanan yang dibuat dalam N hari terakhir
+  scope :dalam_hari, ->(hari) { where(created_at: hari.days.ago..Time.current) }
 
   # Pesanan yang belum dibayar dan sudah lewat batas waktu.
   # Pesanan yang bukti bayarnya sedang menunggu verifikasi admin tidak ikut.
@@ -14,6 +21,9 @@ class Order < ApplicationRecord
   }
 
   validates :recipient_name, :phone, :street, :city, :province, :postal_code, presence: true
+  # hanya diperiksa saat admin menandai pesanan dikirim (save dengan context: :ship)
+  validate :shipping_info_present, on: :ship
+
 
   def self.checkout(user:, cart:, address:)
    order= user.orders.build(
@@ -76,11 +86,20 @@ class Order < ApplicationRecord
   # Semua method di bawah mengembalikan true kalau berhasil, false kalau
   # status pesanan saat ini tidak mengizinkan aksinya.
 
-  # paid -> shipped
-  def ship
+  
+  # paid -> shipped, dengan kurir dan nomor resi
+  def ship(courier:, tracking_number:)
     return false unless paid?
-    shipped!
+
+    assign_attributes(
+      status: :shipped,
+      courier: courier,
+      tracking_number: tracking_number.to_s.strip,
+      shipped_at: Time.current
+    )
+    save(context: :ship)
   end
+
 
   # shipped -> completed
   def complete
@@ -121,5 +140,13 @@ class Order < ApplicationRecord
       cancel if Order.expired_unpaid.exists?(id: id)
     end
   end
+
+  private
+# validasi untuk memastikan bahwa kurir yang dipilih ada dalam daftar COURIERS dan nomor resi tidak kosong. Jika salah satu dari kondisi ini tidak terpenuhi, akan menambahkan pesan kesalahan ke objek pesanan.
+def shipping_info_present
+  errors.add(:base, "Kurir harus dipilih") unless COURIERS.include?(courier)
+  errors.add(:base, "Nomor resi wajib diisi") if tracking_number.blank?
+end
+
 
 end
