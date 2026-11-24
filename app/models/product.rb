@@ -13,20 +13,24 @@ class Product < ApplicationRecord
   has_one_attached :image
 
  
-  def self.top_of_the_month
-    # count order pada product
-    # order_items.count
-    counts = OrderItem.group(:product_id).count
-    # ambil produk dengan order terbanyak, kalau tidak ada yang punya order ambil produk terbaru yang punya deskripsi, kalau tidak ada yang punya deskripsi ambil produk terbaru
-    where(id: counts.keys).max_by { |product| counts[product.id] } || where.not(description: [nil, ""]).order(created_at: :desc).first || order(created_at: :desc).first
+# Produk terlaris 30 hari terakhir, dihitung dari jumlah barang (quantity)
+# pada pesanan yang sudah dibayar. Kalau belum ada penjualan, ambil produk terbaru.
+def self.top_of_the_month
+  #  cari pesanan dengan status paid, shipped, atau completed yang dibuat dalam 30 hari terakhir. Ini akan digunakan untuk menghitung produk terlaris berdasarkan jumlah barang yang dipesan.
+  pesanan_laku = Order.where(status: %i[paid shipped completed], created_at: 30.days.ago..Time.current)
+# menggunakan Arel.sql untuk menghindari masalah dengan sintaks SQL yang kompleks. Arel adalah pustaka Ruby yang digunakan oleh ActiveRecord untuk membangun kueri SQL secara dinamis. Dengan menggunakan Arel.sql, kita dapat menyisipkan potongan SQL mentah ke dalam kueri ActiveRecord tanpa harus khawatir tentang masalah sintaks atau keamanan. Dalam hal ini, kita menggunakan Arel.sql untuk menyusun kueri yang menghitung jumlah barang (quantity) dari order_items yang terkait dengan pesanan yang sudah dibayar dalam 30 hari terakhir.
+  top_id = OrderItem
+    .joins(:order) # join tabel orders
+    .merge(pesanan_laku) # menggabungkan kondisi dari pesanan_laku
+    .group(:product_id) # mengelompokkan hasil berdasarkan product_id
+    .order(Arel.sql("SUM(order_items.quantity) DESC")) # mengurutkan hasil berdasarkan jumlah barang yang dipesan secara menurun
+    .pick(:product_id) # mengambil product_id dari produk terlaris
 
-  end
-  def self.search(keyword)
-    return all if keyword.blank?
+  find_by(id: top_id) ||
+    where.not(description: [ nil, "" ]).order(created_at: :desc).first ||
+    order(created_at: :desc).first
+end
 
-    pola="%#{keyword.downcase}%"
-    where("name ILIKE :q OR description ILIKE :q", q: pola)
-  end
 
   private
 
