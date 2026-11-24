@@ -21,7 +21,7 @@ class Admin::DashboardController < Admin::BaseController
     @stok_menipis = Product.menipis.order(:stock, :name).limit(10)
     @stok_habis = Product.habis.count
 
-    @pesanan_terbaru = Order.includes(:user).order(created_at: :desc, id: :desc).limit(5)
+    @pesanan_terbaru = Order.includes(:user, :payments).order(created_at: :desc, id: :desc).limit(5)
   end
 end
  

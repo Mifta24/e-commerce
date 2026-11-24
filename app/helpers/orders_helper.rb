@@ -2,7 +2,7 @@ module OrdersHelper
   # Teks dan warna badge untuk tiap status
   ORDER_STATUS = {
     "pending"   => { label: "Menunggu pembayaran", color: "warning" },
-    "paid"      => { label: "Dibayar",             color: "info" },
+    "paid"      => { label: "Pembayaran Sukses",             color: "info" },
     "shipped"   => { label: "Dikirim",             color: "primary" },
     "completed" => { label: "Selesai",             color: "success" },
     "canceled"  => { label: "Dibatalkan",          color: "secondary" }
@@ -27,4 +27,13 @@ module OrdersHelper
     style = PAYMENT_STATUS.fetch(payment.status)
     tag.span(style[:label], class: "badge text-bg-#{style[:color]}")
   end
+
+  def order_status_badge(order)
+    # bukti bayar sudah dikirim tapi belum diperiksa admin: statusnya masih pending di database
+    return tag.span("Menunggu verifikasi", class: "badge text-bg-warning") if order.awaiting_verification?
+
+    style = ORDER_STATUS.fetch(order.status)
+    tag.span(style[:label], class: "badge text-bg-#{style[:color]}")
+  end
+
 end

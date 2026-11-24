@@ -35,9 +35,6 @@
           <td><%= order.user.name %></td>
           <td>
             <%= order_status_badge(order) %>
-            <% if order.payments.any?(&:submitted?) %>
-              <span class="badge text-bg-danger">Perlu verifikasi</span>
-            <% end %>
           </td>
           <td><%= rupiah(order.total) %></td>
           <td><%= link_to "Lihat", admin_order_path(order) %></td>

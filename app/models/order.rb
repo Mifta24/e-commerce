@@ -77,6 +77,12 @@ class Order < ApplicationRecord
    pending? && (  latest_payment.nil? || latest_payment.rejected? )
   end
 
+    # true kalau pelanggan sudah mengirim bukti bayar dan admin belum memeriksanya.
+  # Status pesanan tetap pending sampai admin mengonfirmasi, jadi ini dibaca dari pembayarannya.
+  def awaiting_verification?
+    pending? && payments.any?(&:submitted?)
+  end
+
    # batas waktu pembayaran; setelah lewat, pesanan dibatalkan otomatis oleh ExpireUnpaidOrdersJob
   def payment_deadline
     created_at + Rails.configuration.x.payment.deadline_hours.hours

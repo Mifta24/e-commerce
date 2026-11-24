@@ -2,7 +2,8 @@ class OrdersController < ApplicationController
   before_action :require_filled_cart, only: %i[new create]
 
   def index
-    @orders = current_user.orders.order(created_at: :desc)
+    @orders = current_user.orders.includes(:payments).order(created_at: :desc)
+
   end
 
   def show
