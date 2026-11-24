@@ -5,6 +5,14 @@ class Order < ApplicationRecord
 
   enum :status, { pending: 0, paid: 1, shipped: 2, completed: 3, canceled: 4 }
 
+  # Pesanan yang belum dibayar dan sudah lewat batas waktu.
+  # Pesanan yang bukti bayarnya sedang menunggu verifikasi admin tidak ikut.
+  scope :expired_unpaid, -> {
+    pending
+      .where(created_at: ...Rails.configuration.x.payment.deadline_hours.hours.ago)
+      .where.not(id: Payment.submitted.select(:order_id))
+  }
+
   validates :recipient_name, :phone, :street, :city, :province, :postal_code, presence: true
 
   def self.checkout(user:, cart:, address:)
@@ -59,7 +67,7 @@ class Order < ApplicationRecord
    pending? && (  latest_payment.nil? || latest_payment.rejected? )
   end
 
-    # batas waktu pembayaran (hanya informasi; belum ada pembatalan otomatis)
+   # batas waktu pembayaran; setelah lewat, pesanan dibatalkan otomatis oleh ExpireUnpaidOrdersJob
   def payment_deadline
     created_at + Rails.configuration.x.payment.deadline_hours.hours
   end
@@ -104,4 +112,14 @@ class Order < ApplicationRecord
 
     hasil
   end
+
+  # Dipakai job. Syaratnya dicek ulang setelah pesanan dikunci, karena sejak
+  # job mencari daftar sampai giliran pesanan ini, pelanggan bisa saja baru
+  # mengunggah bukti bayar.
+  def cancel_if_expired
+    with_lock do
+      cancel if Order.expired_unpaid.exists?(id: id)
+    end
+  end
+
 end
