@@ -11,8 +11,24 @@ class Order < ApplicationRecord
   LAKU = %w[paid shipped completed].freeze
   scope :laku, -> { where(status: LAKU) }
 
-  # Pesanan yang dibuat dalam N hari terakhir
-  scope :dalam_hari, ->(hari) { where(created_at: hari.days.ago..Time.current) }
+  # Pesanan dalam N hari terakhir, dihitung per tanggal kalender: hari ini + (N - 1) hari sebelumnya,
+  # mulai pukul 00:00. Jadi periode 7 hari = tepat 7 batang di grafik.
+  scope :dalam_hari, ->(hari) { where(created_at: (hari - 1).days.ago.beginning_of_day..Time.current) }
+
+  # Penjualan per hari untuk grafik: array berisi satu hash per tanggal, dari yang terlama ke hari ini.
+  # Tanggal tanpa penjualan tetap ada (total 0) supaya grafiknya tidak bolong.
+  def self.penjualan_per_hari(hari)
+    # pluck di[pake buat ambil data created_at dari pesanan yg laku dan setalh itu di group by tanggalnya, sehingga kita bisa menghitung total penjualan dan jumlah pesanan per tanggal.]
+    # pluck mengembalikan waktu dalam zona Jakarta, jadi to_date sudah sesuai tanggal di Indonesia
+    per_tanggal = laku.dalam_hari(hari).pluck(:created_at, :total).group_by { |waktu, _total| waktu.to_date }
+
+    # buat array dari tanggal-tanggal yang diinginkan, dari yang terlama ke hari ini. Untuk setiap tanggal, ambil total penjualan dan jumlah pesanan dari per_tanggal. Jika tidak ada penjualan pada tanggal itu, total = 0 dan jumlah = 0.
+    (hari - 1).downto(0).map do |mundur|
+      tanggal = Date.current - mundur # tanggal sekarang dikurangi mundur hari, sehingga mundur = 0 = hari ini, mundur = 1 = kemarin, dst.
+      baris = per_tanggal.fetch(tanggal, [])
+      { tanggal: tanggal, total: baris.sum { |_waktu, total| total }, jumlah: baris.size }
+    end
+  end
 
   # Pesanan yang belum dibayar dan sudah lewat batas waktu.
   # Pesanan yang bukti bayarnya sedang menunggu verifikasi admin tidak ikut.

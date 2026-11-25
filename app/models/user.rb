@@ -22,7 +22,7 @@ class User < ApplicationRecord
     #sanitize_sql_like digunakan untuk membuat pola pencarian yang aman dengan menghindari karakter khusus yang dapat memengaruhi query SQL. 
     #seperti karakter wildcard % atau yang digunakan dalam LIKE query. Dengan menggunakan sanitize_sql_like, kita dapat memastikan bahwa input pengguna tidak akan menyebabkan masalah keamanan atau kesalahan sintaks SQL.
     pola="%#{sanitize_sql_like(keyword.strip)}%"
-    where("users.name ILIKE :q OR users.email_address ILIKE :q", pola)
+    where("users.name ILIKE :q OR users.email_address ILIKE :q", q: pola)
   end
 
   # Menambahkan kolom bayangan: jumlah_pesanan, total_belanja (hanya pesanan yang sudah dibayar),

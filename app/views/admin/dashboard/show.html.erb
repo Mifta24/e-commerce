@@ -5,7 +5,16 @@
     <p class="eyebrow mb-1">Admin</p>
     <h1 class="section-title"><strong>Dasbor</strong></h1>
   </div>
+  <%# ---------- Pilihan periode ---------- %>
+  <div class="btn-group" role="group" aria-label="Periode">
+    <% Admin::DashboardController::PERIODE.each do |hari| %>
+      <%= link_to "#{hari} hari", admin_root_path(hari: hari),
+            class: "btn btn-sm #{@hari == hari ? 'btn-ink' : 'btn-outline-secondary'}",
+            aria: { current: (@hari == hari ? "true" : nil) } %>
+    <% end %>
+  </div>
 </div>
+
 
 <%# ---------- Angka ringkas ---------- %>
 <div class="row g-3 mb-4">
@@ -40,6 +49,30 @@
 </div>
 
 <div class="row g-4 mb-4">
+  <%# ---------- Grafik penjualan per hari ---------- %>
+<% tertinggi = @grafik.map { |hari| hari[:total] }.max %>
+<div class="form-card mb-4">
+  <h2 class="h5">Penjualan per hari</h2>
+  <% if tertinggi.zero? %>
+    <p class="text-body-secondary mb-0">Belum ada penjualan dalam <%= @hari %> hari terakhir.</p>
+  <% else %>
+    <div class="sales-chart" role="img"
+         aria-label="Grafik penjualan <%= @hari %> hari terakhir, tertinggi <%= rupiah(tertinggi) %> per hari">
+      <% @grafik.each do |hari| %>
+        <% tinggi = hari[:total].zero? ? 2 : [ hari[:total] * 100.0 / tertinggi, 3 ].max %>
+        <div class="sales-chart__bar <%= 'sales-chart__bar--empty' if hari[:total].zero? %>"
+             style="height: <%= tinggi.round(1) %>%;"
+             title="<%= hari[:tanggal].strftime('%d-%m-%Y') %>: <%= rupiah(hari[:total]) %> (<%= hari[:jumlah] %> pesanan)"></div>
+      <% end %>
+    </div>
+    <div class="d-flex justify-content-between small text-body-secondary mt-2">
+      <span><%= @grafik.first[:tanggal].strftime("%d-%m-%Y") %></span>
+      <span><%= @grafik.last[:tanggal].strftime("%d-%m-%Y") %></span>
+    </div>
+  <% end %>
+</div>
+
+
   <%# ---------- Produk terlaris ---------- %>
   <div class="col-12 col-lg-6">
     <h2 class="h5">Produk terlaris (30 hari)</h2>
