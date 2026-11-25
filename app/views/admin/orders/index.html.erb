@@ -2,18 +2,39 @@
 
 <div class="page-header">
   <div>
-    <p class="eyebrow mb-1">Admin</p>
+    <p class="eyebrow mb-1">Admin · <%= @orders.total_count %> pesanan</p>
     <h1 class="section-title"><strong>Kelola Pesanan</strong></h1>
   </div>
 </div>
 
+<%= form_with url: admin_orders_path, method: :get, class: "row g-2 mb-3" do |form| %>
+  <%= form.hidden_field :status, value: @status if @status.present? %>
+  <div class="col-12 col-lg-5">
+    <%= form.search_field :q, value: @q, placeholder: "Cari nomor, nama, atau email pelanggan...", class: "form-control" %>
+  </div>
+  <div class="col-6 col-lg-2">
+    <%= form.date_field :dari, value: @dari, class: "form-control", "aria-label": "Dari tanggal" %>
+  </div>
+  <div class="col-6 col-lg-2">
+    <%= form.date_field :sampai, value: @sampai, class: "form-control", "aria-label": "Sampai tanggal" %>
+  </div>
+  <div class="col-12 col-lg-3 d-flex gap-2">
+    <%= form.submit "Cari", class: "btn btn-ink flex-grow-1" %>
+    <%= link_to "Reset", admin_orders_path, class: "btn-text align-self-center" %>
+  </div>
+<% end %>
+
 <div class="d-flex flex-wrap gap-2 mb-4">
-  <%= link_to "Semua", admin_orders_path, class: "filter-pill #{'active' if @status.blank?}" %>
+  <%= link_to "Semua", admin_orders_path(@filter), class: "filter-pill #{'active' if @status.blank?}" %>
+  <%= link_to "Menunggu verifikasi", admin_orders_path(@filter.merge(status: "verifikasi")),
+        class: "filter-pill #{'active' if @status == 'verifikasi'}" %>
   <% Order.statuses.each_key do |status| %>
-    <%= link_to order_status_label(status), admin_orders_path(status: status),
+    <%= link_to order_status_label(status), admin_orders_path(@filter.merge(status: status)),
           class: "filter-pill #{'active' if @status == status}" %>
   <% end %>
 </div>
+
+
 
 <% if @orders.any? %>
   <table class="table align-middle">
@@ -45,5 +66,7 @@
 
   <%= paginate @orders %>
 <% else %>
-  <p class="text-center text-body-secondary py-5">Belum ada pesanan.</p>
+  <p class="text-center text-body-secondary py-5">
+    <%= (@q.present? || @dari || @sampai || @status.present?) ? "Tidak ada pesanan yang cocok dengan filter ini." : "Belum ada pesanan." %>
+  </p>
 <% end %>

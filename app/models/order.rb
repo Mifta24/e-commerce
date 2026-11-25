@@ -15,6 +15,28 @@ class Order < ApplicationRecord
   # mulai pukul 00:00. Jadi periode 7 hari = tepat 7 batang di grafik.
   scope :dalam_hari, ->(hari) { where(created_at: (hari - 1).days.ago.beginning_of_day..Time.current) }
 
+    # Pesanan yang bukti bayarnya sudah dikirim pelanggan dan belum diperiksa admin
+  scope :menunggu_verifikasi, -> { pending.where(id: Payment.submitted.select(:order_id)) }
+
+  # Batas tanggal untuk filter admin. Tanggal kosong (nil) berarti tidak dibatasi.
+  scope :dari_tanggal, ->(tanggal) { tanggal ? where(created_at: tanggal.beginning_of_day..) : all }
+  scope :sampai_tanggal, ->(tanggal) { tanggal ? where(created_at: ..tanggal.end_of_day) : all }
+
+  # Cari berdasarkan nomor pesanan (boleh diawali #), nama atau email pelanggan, atau nama penerima.
+  def self.search(keyword)
+    keyword = keyword.to_s.strip
+    return all if keyword.blank?
+
+    pola = "%#{sanitize_sql_like(keyword)}%"
+    syarat = "users.name ILIKE :q OR users.email_address ILIKE :q OR orders.recipient_name ILIKE :q"
+    # nomor hanya dicocokkan kalau isinya angka (maksimal 9 digit supaya tidak melebihi batas integer)
+    nomor = keyword.delete_prefix("#") # hapus tanda # kalau ada
+    syarat += " OR orders.id = :id" if nomor.match?(/\A\d{1,9}\z/)
+
+    joins(:user).where(syarat, q: pola, id: nomor.to_i)
+  end
+
+
   # Penjualan per hari untuk grafik: array berisi satu hash per tanggal, dari yang terlama ke hari ini.
   # Tanggal tanpa penjualan tetap ada (total 0) supaya grafiknya tidak bolong.
   def self.penjualan_per_hari(hari)

@@ -17,23 +17,24 @@ class Product < ApplicationRecord
   scope :menipis, -> { where(stock: 1..LOW_STOCK) }
   scope :habis, -> { where(stock: 0) }
  
-# Produk terlaris 30 hari terakhir, dihitung dari jumlah barang (quantity)
-# pada pesanan yang sudah dibayar. Kalau belum ada penjualan, ambil produk terbaru.
-def self.top_of_the_month
-  #  cari pesanan dengan status paid, shipped, atau completed yang dibuat dalam 30 hari terakhir. Ini akan digunakan untuk menghitung produk terlaris berdasarkan jumlah barang yang dipesan.
-  pesanan_laku = Order.where(status: %i[paid shipped completed], created_at: 30.days.ago..Time.current)
-# menggunakan Arel.sql untuk menghindari masalah dengan sintaks SQL yang kompleks. Arel adalah pustaka Ruby yang digunakan oleh ActiveRecord untuk membangun kueri SQL secara dinamis. Dengan menggunakan Arel.sql, kita dapat menyisipkan potongan SQL mentah ke dalam kueri ActiveRecord tanpa harus khawatir tentang masalah sintaks atau keamanan. Dalam hal ini, kita menggunakan Arel.sql untuk menyusun kueri yang menghitung jumlah barang (quantity) dari order_items yang terkait dengan pesanan yang sudah dibayar dalam 30 hari terakhir.
-  top_id = OrderItem
-    .joins(:order) # join tabel orders
-    .merge(pesanan_laku) # menggabungkan kondisi dari pesanan_laku
-    .group(:product_id) # mengelompokkan hasil berdasarkan product_id
-    .order(Arel.sql("SUM(order_items.quantity) DESC")) # mengurutkan hasil berdasarkan jumlah barang yang dipesan secara menurun
-    .pick(:product_id) # mengambil product_id dari produk terlaris
+  # Produk terlaris 30 hari terakhir, dihitung dari jumlah barang (quantity)
+  # pada pesanan yang sudah dibayar. Kalau belum ada penjualan, ambil produk terbaru.
+  def self.top_of_the_month
+    #  cari pesanan dengan status paid, shipped, atau completed yang dibuat dalam 30 hari terakhir. Ini akan digunakan untuk menghitung produk terlaris berdasarkan jumlah barang yang dipesan.
+    # pesanan_laku = Order.where(status: %i[paid shipped completed], created_at: 30.days.ago..Time.current)
+    pesanan_laku = Order.laku.dalam_hari(30)
+  # menggunakan Arel.sql untuk menghindari masalah dengan sintaks SQL yang kompleks. Arel adalah pustaka Ruby yang digunakan oleh ActiveRecord untuk membangun kueri SQL secara dinamis. Dengan menggunakan Arel.sql, kita dapat menyisipkan potongan SQL mentah ke dalam kueri ActiveRecord tanpa harus khawatir tentang masalah sintaks atau keamanan. Dalam hal ini, kita menggunakan Arel.sql untuk menyusun kueri yang menghitung jumlah barang (quantity) dari order_items yang terkait dengan pesanan yang sudah dibayar dalam 30 hari terakhir.
+    top_id = OrderItem
+      .joins(:order) # join tabel orders
+      .merge(pesanan_laku) # menggabungkan kondisi dari pesanan_laku
+      .group(:product_id) # mengelompokkan hasil berdasarkan product_id
+      .order(Arel.sql("SUM(order_items.quantity) DESC")) # mengurutkan hasil berdasarkan jumlah barang yang dipesan secara menurun
+      .pick(:product_id) # mengambil product_id dari produk terlaris
 
-  find_by(id: top_id) ||
-    where.not(description: [ nil, "" ]).order(created_at: :desc).first ||
-    order(created_at: :desc).first
-end
+    find_by(id: top_id) ||
+      where.not(description: [ nil, "" ]).order(created_at: :desc).first ||
+      order(created_at: :desc).first
+  end
 
   def self.search(keyword)
     return all if keyword.blank?
