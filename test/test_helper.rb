@@ -8,8 +8,11 @@ module ActiveSupport
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
 
+    # fixtures :all dimatikan: fixture bawaan scaffold usang (token cart kembar, user tanpa name).
+    # Tes membuat datanya sendiri di setup.
+
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-    fixtures :all
+    # fixtures :all
 
     # Add more helper methods to be used by all tests here...
   end
