@@ -7,8 +7,10 @@ class Order < ApplicationRecord
   # konstanta untuk daftar kurir yang tersedia. Konstanta ini digunakan untuk membatasi pilihan kurir yang dapat dipilih saat mengirimkan pesanan. Dengan mendefinisikan daftar kurir sebagai konstanta, kita dapat dengan mudah mengelola dan memperbarui daftar kurir yang tersedia di seluruh aplikasi.
   COURIERS = [ "JNE", "J&T Express", "SiCepat", "AnterAja", "Pos Indonesia", "Ninja Xpress" ].freeze
 
-  # Pesanan yang dianggap penjualan: sudah dibayar (paid, shipped, completed)
-  scope :laku, -> { where(status: %i[paid shipped completed]) }
+    # Status pesanan yang dianggap penjualan: sudah dibayar
+  LAKU = %w[paid shipped completed].freeze
+  scope :laku, -> { where(status: LAKU) }
+
   # Pesanan yang dibuat dalam N hari terakhir
   scope :dalam_hari, ->(hari) { where(created_at: hari.days.ago..Time.current) }
 

@@ -15,4 +15,26 @@ class User < ApplicationRecord
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   enum :role, { customer: 0, admin: 1 }
+
+  # searcfh untuk namaatau emailo customer
+  def self.search(keyword)
+    return all if keyword.blank?
+    #sanitize_sql_like digunakan untuk membuat pola pencarian yang aman dengan menghindari karakter khusus yang dapat memengaruhi query SQL. 
+    #seperti karakter wildcard % atau yang digunakan dalam LIKE query. Dengan menggunakan sanitize_sql_like, kita dapat memastikan bahwa input pengguna tidak akan menyebabkan masalah keamanan atau kesalahan sintaks SQL.
+    pola="%#{sanitize_sql_like(keyword.strip)}%"
+    where("users.name ILIKE :q OR users.email_address ILIKE :q", pola)
+  end
+
+  # Menambahkan kolom bayangan: jumlah_pesanan, total_belanja (hanya pesanan yang sudah dibayar),
+  # dan pesanan_terakhir. left_joins supaya pengguna tanpa pesanan tetap muncul.
+  scope :dengan_statistik, -> {
+    laku = Order.statuses.values_at(*Order::LAKU).join(",")
+    left_joins(:orders)
+      .group("users.id")
+      .select("users.*",
+        "COUNT (orders.id) AS jumlah_pesanan",
+        "COALESCE(SUM(orders.total) FILTER (WHERE orders.status IN (#{laku})), 0) AS total_belanja",
+        "MAX(orders.created_at) AS pesanan_terakhir"
+      )
+  }
 end

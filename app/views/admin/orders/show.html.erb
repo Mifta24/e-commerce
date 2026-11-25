@@ -14,7 +14,7 @@
   <div class="col-12 col-md-6">
     <h2 class="h5">Pelanggan</h2>
     <p>
-      <%= @order.user.name %><br>
+            <%= link_to @order.user.name, admin_customer_path(@order.user) %><br>
       <%= @order.user.email_address %><br>
       <%= @order.user.phone.presence || "-" %>
     </p>

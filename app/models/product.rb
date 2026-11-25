@@ -38,7 +38,9 @@ end
   def self.search(keyword)
     return all if keyword.blank?
 
-    pola = "%#{keyword.downcase}%"
+    # pola = "%#{keyword.downcase}%"
+    # sanitize_sql_like digunakan untuk membuat pola pencarian yang aman dengan menghindari karakter khusus yang dapat memengaruhi query SQL.
+    pola = "%#{sanitize_sql_like(keyword.strip)}%"
     where("name ILIKE :q OR description ILIKE :q", q: pola)
   end
 

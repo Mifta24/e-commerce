@@ -1,0 +1,63 @@
+<% content_for :title, "Pelanggan | Admin" %>
+
+<div class="page-header">
+  <div>
+    <p class="eyebrow mb-1">Admin · <%= @customers.total_count %> pelanggan</p>
+    <h1 class="section-title"><strong>Pelanggan</strong></h1>
+  </div>
+</div>
+
+<%= form_with url: admin_customers_path, method: :get, class: "row g-2 mb-4" do |form| %>
+  <div class="col-12 col-md-6">
+    <%= form.search_field :q, value: params[:q], placeholder: "Cari nama atau email...", class: "form-control" %>
+  </div>
+  <div class="col-6 col-md-3">
+    <%= form.select :urut,
+          options_for_select([ [ "Belanja terbanyak", "belanja" ] ], params[:urut]),
+          { include_blank: "Terbaru mendaftar" }, class: "form-select" %>
+  </div>
+  <div class="col-6 col-md-3 d-flex gap-2">
+    <%= form.submit "Terapkan", class: "btn btn-ink flex-grow-1" %>
+    <%= link_to "Reset", admin_customers_path, class: "btn-text align-self-center" %>
+  </div>
+<% end %>
+
+<% if @customers.any? %>
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Email</th>
+          <th>Terdaftar</th>
+          <th class="text-end">Pesanan</th>
+          <th class="text-end" title="Hanya pesanan yang sudah dibayar">Total belanja</th>
+          <th>Pesanan terakhir</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @customers.each do |customer| %>
+          <tr>
+            <td>
+              <%= link_to customer.name, admin_customer_path(customer) %>
+              <% if customer.admin? %><span class="badge text-bg-dark ms-1">Admin</span><% end %>
+            </td>
+            <td><%= customer.email_address %></td>
+            <td><%= customer.created_at.strftime("%d-%m-%Y") %></td>
+            <td class="text-end"><%= customer.jumlah_pesanan %></td>
+            <td class="text-end"><%= rupiah(customer.total_belanja) %></td>
+            <td><%= customer.pesanan_terakhir&.strftime("%d-%m-%Y") || "-" %></td>
+            <td class="text-end"><%= link_to "Lihat", admin_customer_path(customer) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= paginate @customers %>
+<% else %>
+  <p class="text-center text-body-secondary py-5">
+    <%= params[:q].present? ? "Tidak ada pelanggan yang cocok dengan “#{params[:q]}”." : "Belum ada pelanggan." %>
+  </p>
+<% end %>

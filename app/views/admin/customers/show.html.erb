@@ -1,0 +1,79 @@
+<% content_for :title, "#{@customer.name} | Admin" %>
+
+<p><%= link_to "← Semua pelanggan", admin_customers_path, class: "btn-text" %></p>
+
+<div class="page-header">
+  <div>
+    <p class="eyebrow mb-1">Pelanggan<%= " · Admin" if @customer.admin? %></p>
+    <h1 class="section-title"><strong><%= @customer.name %></strong></h1>
+    <p class="text-body-secondary mb-0">
+      <%= @customer.email_address %> · <%= @customer.phone.presence || "tanpa nomor telepon" %>
+    </p>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="form-card h-100">
+      <div class="text-body-secondary small">Total belanja</div>
+      <div class="fs-4 fw-semibold"><%= rupiah(@customer.total_belanja) %></div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="form-card h-100">
+      <div class="text-body-secondary small">Jumlah pesanan</div>
+      <div class="fs-4 fw-semibold"><%= @customer.jumlah_pesanan %></div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="form-card h-100">
+      <div class="text-body-secondary small">Produk favorit</div>
+      <div class="fs-4 fw-semibold"><%= @jumlah_favorit %></div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="form-card h-100">
+      <div class="text-body-secondary small">Terdaftar</div>
+      <div class="fs-4 fw-semibold"><%= @customer.created_at.strftime("%d-%m-%Y") %></div>
+    </div>
+  </div>
+</div>
+
+<h2 class="h5">Alamat tersimpan</h2>
+<% if @addresses.any? %>
+  <div class="row g-3 mb-4">
+    <% @addresses.each do |address| %>
+      <div class="col-12 col-md-6">
+        <div class="form-card h-100">
+          <strong><%= address.recipient_name %></strong> (<%= address.phone %>)<br>
+          <%= address.street %><br>
+          <%= address.city %>, <%= address.province %> <%= address.postal_code %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-body-secondary mb-4">Belum ada alamat tersimpan.</p>
+<% end %>
+
+<h2 class="h5">Riwayat pesanan</h2>
+<% if @orders.any? %>
+  <table class="table align-middle">
+    <thead>
+      <tr><th>No.</th><th>Tanggal</th><th>Status</th><th>Total</th><th></th></tr>
+    </thead>
+    <tbody>
+      <% @orders.each do |order| %>
+        <tr>
+          <td>#<%= order.id %></td>
+          <td><%= order.created_at.strftime("%d-%m-%Y %H:%M") %></td>
+          <td><%= order_status_badge(order) %></td>
+          <td><%= rupiah(order.total) %></td>
+          <td><%= link_to "Lihat", admin_order_path(order) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="text-body-secondary">Belum pernah memesan.</p>
+<% end %>

@@ -5,7 +5,8 @@
         aktif: controller_path == "admin/products" %>
   <%= admin_nav_link "Kategori", "tags", admin_categories_path,
         aktif: controller_path == "admin/categories" %>
-
+  <%= admin_nav_link "Pelanggan", "people", admin_customers_path,
+        aktif: controller_path == "admin/customers" %>
   <%= admin_nav_link "Pesanan", "receipt", admin_orders_path,
         aktif: controller_path == "admin/orders", badge: Payment.submitted.count %>
   <%= admin_nav_link "Lihat toko", "shop", root_path, aktif: false %>

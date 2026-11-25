@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     root "dashboard#show"
     resources :categories, except: :show  # menyediakan semua route kecuali show, karena admin tidak perlu melihat detail kategori
     resources :products, except: :show  # menyediakan semua route kecuali show, karena admin tidak perlu melihat detail produk
-
+    resources :customers, only: %i[index show]
     resources :orders, only: %i[index show] do
       member do # member block untuk menambahkan route yang memerlukan ID pesanan
         patch :ship
