@@ -4,7 +4,7 @@
   <%= form.label :image, "Gambar", class: "form-label" %>
   <% if product.image.attached? %>
     <div class="mb-2">
-      <%= image_tag product.image, alt: product.name, style: "max-width: 12rem; border-radius: 1rem;" %>
+      <%= image_tag product.image.variant(:medium), alt: product.name, style: "max-width: 12rem; border-radius: 1rem;" %>
     </div>
   <% end %>
   <%= form.file_field :image, accept: "image/png,image/jpeg,image/webp", class: "form-control" %>

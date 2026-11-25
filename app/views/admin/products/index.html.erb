@@ -46,7 +46,7 @@
           <tr>
             <td style="width: 4rem;">
               <% if product.image.attached? %>
-                <%= image_tag product.image, alt: product.name, style: "width: 3rem; height: 3rem; object-fit: cover; border-radius: .75rem;" %>
+                <%= image_tag product.image.variant(:thumb), alt: product.name, style: "width: 3rem; height: 3rem; object-fit: cover; border-radius: .75rem;" %>
               <% else %>
                 <div class="tile--<%= tone_for(product) %> d-flex align-items-center justify-content-center"
                      style="width: 3rem; height: 3rem; border-radius: .75rem;"><i class="bi bi-bag-heart"></i></div>

@@ -10,7 +10,13 @@ class Product < ApplicationRecord
   has_many :favorites, dependent: :destroy
   # asosiation untuk menghubungkan produk dengan kategori. Setiap produk dapat memiliki satu kategori, dan jika kategori dihapus, produk yang terkait akan tetap ada tetapi kolom category_id pada produk akan diatur menjadi null.
   belongs_to :category, optional: true
-  has_one_attached :image
+  # gambar
+  has_one_attached :image do |attachable|
+    # optimisasi gambar: membuat versi thumbnail dan medium dari gambar yang diunggah. Versi thumbnail memiliki ukuran maksimal 100x100 piksel, sedangkan versi medium memiliki ukuran maksimal 300x300 piksel. Ini memungkinkan aplikasi untuk menampilkan gambar dalam berbagai ukuran sesuai kebutuhan, misalnya thumbnail untuk daftar produk dan versi medium untuk halaman detail produk.
+    attachable.variant :thumb, resize_to_limit: [ 300, 300 ] , preprocessed: true , format: :webp
+    # versi medium memiliki ukuran maksimal 300x300 piksel. Ini memungkinkan aplikasi untuk menampilkan gambar dalam berbagai ukuran sesuai kebutuhan, misalnya thumbnail untuk daftar produk dan versi medium untuk halaman detail produk.
+    attachable.variant :medium, resize_to_limit: [ 800, 800 ], format: :webp
+  end
   # scope digunakan untuk membuat query yang dapat digunakan kembali. Dalam hal ini, scope :menipis digunakan untuk mengambil produk dengan stok antara 1 hingga LOW_STOCK, sedangkan scope :habis digunakan untuk mengambil produk dengan stok 0.
   # stok dianggap menipis kalau tinggal segini atau kurang (tapi belum habis)
   LOW_STOCK = 5

@@ -6,7 +6,7 @@
   <div class="col-12 col-md-6">
   <div class="tile tile--lg tile--<%= tone_for(@product) %>">
   <% if @product.image.attached? %>
-    <%= image_tag @product.image, alt: @product.name, class: "product-img" %>
+    <%= image_tag @product.image.variant(:medium), alt: @product.name, class: "product-img" %>
   <% else %>
     <i class="bi bi-bag-heart tile-icon" aria-hidden="true"></i>
   <% end %>
