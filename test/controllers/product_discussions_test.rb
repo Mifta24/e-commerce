@@ -55,4 +55,14 @@ class ProductDiscussionsTest < ActionDispatch::IntegrationTest
     get product_url(@produk)
     assert_select "form[action=?]", product_comments_path(@produk)
   end
+
+  test "balasan juga punya tombol balas dan form-nya menyapa penulisnya" do
+    utama = tulis("Ukurannya pas?")
+    tulis("Pas kok", user: @penjawab, parent: utama)
+    sign_in_as @user
+    get product_url(@produk)
+    assert_select "#diskusi details", 2                # satu di komentar utama, satu di balasan
+    assert_select "#diskusi details textarea", text: /@Sari/
+  end
+
 end

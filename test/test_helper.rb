@@ -2,12 +2,13 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 require_relative "test_helpers/session_test_helper"
+require_relative "test_helpers/pesanan_test_helper"
 
 module ActiveSupport
   class TestCase
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
-
+    include PesananTestHelper
     # fixtures :all dimatikan: fixture bawaan scaffold usang (token cart kembar, user tanpa name).
     # Tes membuat datanya sendiri di setup.
 

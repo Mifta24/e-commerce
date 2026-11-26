@@ -12,14 +12,19 @@
     <%= simple_format(h(comment.body), { class: "mb-2" }) %>
   <% end %>
 
-  <% unless balasan %>
-    <% if current_user %>
-      <details class="mb-2">
-        <summary class="btn-text">Balas</summary>
-        <%= render "comments/form", product: product, parent: comment %>
-      </details>
-    <% end %>
-    <%= render partial: "comments/comment", collection: comment.replies, as: :comment,
-          locals: { product: product, balasan: true } %>
-  <% end %>
+  <% if current_user %>
+  <details class="mb-2">
+    <summary class="btn-text">Balas</summary>
+    <%# kalau ini balasan, form diisi "@nama" supaya jelas yang dituju siapa %>
+    <%= render "comments/form", product: product, parent: comment,
+          sapa: (comment.user.name if balasan) %>
+  </details>
+<% end %>
+
+<%# hanya komentar utama yang memuat daftar balasannya (satu tingkat) %>
+<%# unless diapkai untuk mengecualikan balasan dari render ulang %>
+<% unless balasan %>
+  <%= render partial: "comments/comment", collection: comment.replies, as: :comment,
+        locals: { product: product, balasan: true } %>
+<% end %>
 </article>
