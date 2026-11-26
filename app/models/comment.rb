@@ -17,7 +17,7 @@ class Comment < ApplicationRecord
   validate :parent_product_must_match
 
   # scope utama dibuat untuk mengambil komentar yang tidak memiliki induk (parent_id: nil), sehingga hanya komentar utama yang dikembalikan.
-  scope :utama , -> { where(parent_id: nil) }
+  scope :utama, -> { where(parent_id: nil) }
 
   private
 

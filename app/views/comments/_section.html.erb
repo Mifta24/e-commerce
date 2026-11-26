@@ -1,0 +1,17 @@
+<%# Pakai: render "comments/section", product:, comments:, jumlah: %>
+<section id="diskusi" class="mt-5 pt-4 border-top">
+  <h2 class="h4 mb-3">Diskusi (<%= jumlah %>)</h2>
+
+  <% if current_user %>
+    <%= render "comments/form", product: product %>
+  <% else %>
+    <p class="text-body-secondary"><%= link_to "Masuk", new_session_path %> untuk ikut berdiskusi.</p>
+  <% end %>
+
+  <% if comments.present? %>
+    <%= render partial: "comments/comment", collection: comments, as: :comment,
+          locals: { product: product } %>
+  <% else %>
+    <p class="text-body-secondary">Belum ada diskusi.</p>
+  <% end %>
+</section>

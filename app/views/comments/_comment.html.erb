@@ -1,0 +1,25 @@
+<%# Satu komentar. balasan: true berarti ini balasan (tidak boleh dibalas lagi) %>
+<% balasan = local_assigns.fetch(:balasan, false) %>
+<article class="<%= balasan ? 'ms-4 mt-3' : 'py-3 border-bottom' %>">
+  <p class="small text-body-secondary mb-1">
+    <strong><%= comment.user.name %></strong> · <%= comment.created_at.strftime("%d-%m-%Y %H:%M") %>
+  </p>
+
+  <% if comment.disembunyikan? %>
+    <p class="fst-italic text-body-secondary mb-2">(komentar disembunyikan oleh admin)</p>
+  <% else %>
+    <%# h() meng-escape HTML; jangan pernah pakai raw / html_safe untuk isi komentar %>
+    <%= simple_format(h(comment.body), { class: "mb-2" }) %>
+  <% end %>
+
+  <% unless balasan %>
+    <% if current_user %>
+      <details class="mb-2">
+        <summary class="btn-text">Balas</summary>
+        <%= render "comments/form", product: product, parent: comment %>
+      </details>
+    <% end %>
+    <%= render partial: "comments/comment", collection: comment.replies, as: :comment,
+          locals: { product: product, balasan: true } %>
+  <% end %>
+</article>

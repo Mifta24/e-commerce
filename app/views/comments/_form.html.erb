@@ -1,0 +1,9 @@
+<%# Pakai: render "comments/form", product:, parent: (opsional, untuk balasan) %>
+<% parent = local_assigns[:parent] %>
+<%= form_with model: Comment.new, url: product_comments_path(product), class: "mb-3" do |form| %>
+  <%= form.hidden_field :parent_id, value: parent.id if parent %>
+  <%= form.text_area :body, id: nil, rows: 2, maxlength: Comment::MAX_BODY, required: true,
+        class: "form-control mb-2", "aria-label": "Tulis komentar",
+        placeholder: parent ? "Tulis balasan..." : "Tulis pertanyaan atau komentar..." %>
+  <%= form.submit parent ? "Kirim balasan" : "Kirim", class: "btn btn-ink btn-sm" %>
+<% end %>
