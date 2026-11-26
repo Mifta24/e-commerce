@@ -34,8 +34,14 @@ Rails.application.routes.draw do
     resources :categories, except: :show  # menyediakan semua route kecuali show, karena admin tidak perlu melihat detail kategori
     resources :products, except: :show  # menyediakan semua route kecuali show, karena admin tidak perlu melihat detail produk
     resources :customers, only: %i[index show]
+    resources :comments, only: :index do
+      member do
+        patch :hide
+        patch :restore
+      end
+    end
     resources :orders, only: %i[index show] do
-      member do # member block untuk menambahkan route yang memerlukan ID pesanan
+      member do # member block untuk menambahkan route yang memerluka n ID pesanan
         patch :ship
         patch :complete
         patch :cancel

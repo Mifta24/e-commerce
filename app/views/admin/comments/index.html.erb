@@ -1,0 +1,65 @@
+<% content_for :title, "Diskusi | Admin" %>
+
+<div class="page-header">
+  <div>
+    <p class="eyebrow mb-1">Admin · <%= @comments.total_count %> komentar</p>
+    <h1 class="section-title"><strong>Diskusi</strong></h1>
+  </div>
+</div>
+
+<div class="d-flex flex-wrap gap-2 mb-3">
+  <%= link_to "Semua", admin_comments_path, class: "filter-pill #{'active' if @status.blank?}" %>
+  <%= link_to "Tampil", admin_comments_path(status: "tampil"),
+        class: "filter-pill #{'active' if @status == 'tampil'}" %>
+  <%= link_to "Disembunyikan", admin_comments_path(status: "disembunyikan"),
+        class: "filter-pill #{'active' if @status == 'disembunyikan'}" %>
+</div>
+
+<% if @comments.any? %>
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>Waktu</th>
+          <th>Produk</th>
+          <th>Penulis</th>
+          <th>Isi</th>
+          <th>Jenis</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @comments.each do |comment| %>
+          <tr>
+            <td><%= comment.created_at.strftime("%d-%m-%Y %H:%M") %></td>
+            <td><%= link_to comment.product.name, product_path(comment.product, anchor: "diskusi") %></td>
+            <td><%= comment.user.name %></td>
+            <td><%= truncate(comment.body, length: 120) %></td>
+            <td><%= comment.parent_id ? "Balasan" : "Utama" %></td>
+            <td>
+              <% if comment.disembunyikan? %>
+                <span class="pill-tag pill-tag--danger">Disembunyikan</span>
+              <% else %>
+                <span class="pill-tag pill-tag--muted">Tampil</span>
+              <% end %>
+            </td>
+            <td class="text-end">
+              <% if comment.disembunyikan? %>
+                <%= button_to "Tampilkan", restore_admin_comment_path(comment), method: :patch,
+                      class: "btn btn-sm btn-ink" %>
+              <% else %>
+                <%= button_to "Sembunyikan", hide_admin_comment_path(comment), method: :patch,
+                      class: "btn btn-sm btn-outline-danger" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= paginate @comments %>
+<% else %>
+  <p class="text-center text-body-secondary py-5">Belum ada komentar.</p>
+<% end %>

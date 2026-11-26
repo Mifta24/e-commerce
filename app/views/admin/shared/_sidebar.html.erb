@@ -10,4 +10,6 @@
   <%= admin_nav_link "Pesanan", "receipt", admin_orders_path,
         aktif: controller_path == "admin/orders", badge: Payment.submitted.count %>
   <%= admin_nav_link "Lihat toko", "shop", root_path, aktif: false %>
+  <%= admin_nav_link "Diskusi", "chat-dots", admin_comments_path,
+      aktif: controller_path == "admin/comments" %>
 </nav>
