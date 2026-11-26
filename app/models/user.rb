@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_one :cart, dependent: :destroy
   has_many :orders, dependent: :restrict_with_error
   has_many :favorites, dependent: :destroy
+  has_many :comments, dependent: :destroy
   # menambahkan relasi many-to-many antara User dan Product melalui model Favorite. Dengan ini, kita bisa mengakses produk favorit pengguna melalui user.favorite_products
   has_many :favorite_products, through: :favorites, source: :product 
   validates :email_address, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }

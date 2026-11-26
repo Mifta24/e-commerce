@@ -8,6 +8,7 @@ class Product < ApplicationRecord
   has_many :cart_items, dependent: :destroy
   has_many :order_items, dependent: :restrict_with_error
   has_many :favorites, dependent: :destroy
+  has_many :comments, dependent: :destroy
   # asosiation untuk menghubungkan produk dengan kategori. Setiap produk dapat memiliki satu kategori, dan jika kategori dihapus, produk yang terkait akan tetap ada tetapi kolom category_id pada produk akan diatur menjadi null.
   belongs_to :category, optional: true
   # gambar
