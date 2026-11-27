@@ -18,5 +18,9 @@ class ProductsController < ApplicationController
     .page(params[:reply_page]).per(5)
     # jumlah diskusi hanya menghitung yang tampil (utama + balasan)
     @jumlah_diskusi = @product.comments.tampil.count
+    # boleh_menilai adalah variabel instance yang menentukan apakah pengguna saat ini diizinkan untuk memberikan penilaian pada produk tertentu. Nilai ini akan digunakan di tampilan (view) untuk menampilkan atau menyembunyikan opsi penilaian.
+    # current_user&.sudah_membeli?(@product) memeriksa apakah pengguna saat ini sudah membeli produk tersebut. Jika pengguna belum login, current_user akan menjadi nil, sehingga operator safe navigation (&.) digunakan untuk menghindari kesalahan. Jika pengguna sudah membeli produk,
+    @boleh_menilai = current_user&.sudah_membeli?(@product) || false
+    @rating_saya= current_user&.ratings&.find_by(product: @product)
   end
 end

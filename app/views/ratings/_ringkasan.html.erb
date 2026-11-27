@@ -1,0 +1,8 @@
+<%# Pakai: render "ratings/ringkasan", product: %>
+<% if product.jumlah_rating.zero? %>
+  <span class="text-body-secondary">Belum ada rating</span>
+<% else %>
+  <span class="text-warning"><%= bintang(product.rata_rata_rating.round) %></span>
+  <strong><%= number_with_precision(product.rata_rata_rating, precision: 1, separator: ",") %></strong>
+  <span class="text-body-secondary">(<%= product.jumlah_rating %> rating)</span>
+<% end %>                                                                                                                     
