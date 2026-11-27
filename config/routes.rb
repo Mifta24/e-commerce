@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     resources :products, only: %i[index show] do
       # Menambahkan route untuk membuat komentar pada produk
       resources :comments, only: :create
-      resources :ratings, only: %i[create update]
+      resource :rating, only: %i[create update]
     end
 
     resource :registration, only: %i[new create]

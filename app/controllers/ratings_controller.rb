@@ -5,7 +5,7 @@ class RatingsController < ApplicationController
   # anchor itu dibuat  untuk menandai bagian rating di halaman produk, sehingga pengguna diarahkan langsung ke bagian tersebut.
   with: -> { redirect_to product_path(params[:product_id], anchor: "rating"), alert: "Terlalu banyak rating. Coba lagi sebentar." }
 
-  before action :set_product
+  before_action :set_product
 
   def create
     rating = current_user.ratings.new(product: @product, stars: nilai_rating)
@@ -17,6 +17,14 @@ class RatingsController < ApplicationController
   end
 
   def update 
+    rating = current_user.ratings.find_by(product: @product)
+    return ke_rating(alert: "Rating tidak ditemukan.") if rating.nil?
+
+    if rating.update(stars: nilai_rating)
+      ke_rating(notice: "Rating berhasil diperbarui.")
+    else
+      ke_rating(alert: rating.errors.full_messages.to_sentence)
+    end
   end
 
   private
