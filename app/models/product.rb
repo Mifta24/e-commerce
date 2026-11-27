@@ -9,6 +9,7 @@ class Product < ApplicationRecord
   has_many :order_items, dependent: :restrict_with_error
   has_many :favorites, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :ratings, dependent: :destroy
   # asosiation untuk menghubungkan produk dengan kategori. Setiap produk dapat memiliki satu kategori, dan jika kategori dihapus, produk yang terkait akan tetap ada tetapi kolom category_id pada produk akan diatur menjadi null.
   belongs_to :category, optional: true
   # gambar
@@ -52,9 +53,16 @@ class Product < ApplicationRecord
     where("name ILIKE :q OR description ILIKE :q", q: pola)
   end
 
+     # rata-rata bintang satu desimal; nil kalau belum ada rating
+  def rata_rata_rating
+    ratings.average(:stars)&.round(1)&.to_f
+  end
+
+  def jumlah_rating = ratings.count
+    
   private
 
-# validasi untuk memastikan bahwa gambar yang diunggah adalah dalam format JPG, PNG, atau WebP dan ukurannya tidak melebihi 5 MB. Jika gambar tidak valid, akan menambahkan pesan kesalahan ke objek produk.
+  # validasi untuk memastikan bahwa gambar yang diunggah adalah dalam format JPG, PNG, atau WebP dan ukurannya tidak melebihi 5 MB. Jika gambar tidak valid, akan menambahkan pesan kesalahan ke objek produk.
   def image_must_be_valid
     return unless image.attached?
 
@@ -67,5 +75,5 @@ class Product < ApplicationRecord
     end
   end
 
-
+ 
 end
