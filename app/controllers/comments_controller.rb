@@ -19,17 +19,17 @@ class CommentsController < ApplicationController
 
     komentar = produk.comments.new(body: atribut[:body], user: current_user, parent: parent)
     if komentar.save
-      ke_diskusi(produk, notice: "Komentar berhasil dikirim.")
+     # jika komentar berhasil disimpan, redirect ke halaman diskusi produk dengan pesan sukses
+     ke_diskusi(produk, buka: parent&.id, notice: "Komentar berhasil dikirim.")
     else
       ke_diskusi(produk, alert: komentar.errors.full_messages.to_sentence)
     end
   end
 
   private
-# ke_diskusi adalah metode privat untuk mengarahkan pengguna ke halaman diskusi produk tertentu dengan pesan tertentu. Metode ini menerima objek produk dan pesan tambahan (seperti notice atau alert) sebagai parameter, lalu melakukan redirect ke URL produk dengan anchor "diskusi" dan menyertakan pesan tersebut.
-# **pesan adalah parameter opsional yang memungkinkan kita mengirimkan pesan tambahan (seperti notice atau alert) saat melakukan redirect. Pesan ini akan diteruskan ke metode redirect_to sebagai parameter tambahan.
-  def ke_diskusi(produk, **pesan)
-    redirect_to product_path(produk, anchor: "diskusi"), **pesan
+ # ke_diskusi adalah metode privat untuk mengarahkan pengguna ke halaman diskusi produk tertentu dengan pesan tertentu. Metode ini menerima objek produk dan pesan tambahan (seperti notice atau alert) sebagai parameter, lalu melakukan redirect ke URL produk dengan anchor "diskusi" dan menyertakan pesan tersebut.
+ # **pesan adalah parameter opsional yang memungkinkan kita mengirimkan pesan tambahan (seperti notice atau alert) saat melakukan redirect. Pesan ini akan diteruskan ke metode redirect_to sebagai parameter tambahan.
+ def ke_diskusi(produk, buka: nil, **pesan)
+    redirect_to product_path(produk, buka: buka, anchor: "diskusi"), **pesan
   end
-
 end

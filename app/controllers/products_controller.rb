@@ -14,7 +14,8 @@ class ProductsController < ApplicationController
   def show
     @product = Product.find(params.expect(:id))
     # komentar utama saja; balasan ikut dimuat sekaligus lewat includes (menghindari N+1)
-    @comments = @product.comments.utama.includes(:user, replies: :user).order(:created_at, :id)
+    @comments = @product.comments.utama.includes(:user, replies: :user).order(created_at: :desc, id: :desc)
+    .page(params[:reply_page]).per(5)
     # jumlah diskusi hanya menghitung yang tampil (utama + balasan)
     @jumlah_diskusi = @product.comments.tampil.count
   end

@@ -38,7 +38,7 @@ end
   end
 
   test "balasan harus satu produk dengan induknya" do
-    utama = newComment.tap(&:save!) #buat, simpan lalu kembalikan objeknya
+    utama = newComment.tap(&:save!) # buat, simpan lalu kembalikan objeknya
     balasan = newComment(product: @produk2, parent: utama)
     # assert not untuk memastikan balasan tidak valid karena produk berbeda dengan induknya
     assert_not balasan.valid?
@@ -56,8 +56,8 @@ end
   test "scope utama hanya komentar tanpa induk" do
     utama = newComment.tap(&:save!)
     newComment(parent: utama).save!
-    # assert_equal untuk memastikan hanya komentar utama yang dikembalikan oleh scope utama
-   assert_equal [utama], Comment.utama.to_a
+   # assert_equal untuk memastikan hanya komentar utama yang dikembalikan oleh scope utama
+   assert_equal [ utama ], Comment.utama.to_a
   end
 
    test "menghapus induk menghapus balasannya" do
@@ -74,5 +74,4 @@ end
       @produk.destroy
     end
   end
-
 end

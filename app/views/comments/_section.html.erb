@@ -11,6 +11,7 @@
   <% if comments.present? %>
     <%= render partial: "comments/comment", collection: comments, as: :comment,
           locals: { product: product } %>
+    <%= paginate comments, param_name: :reply_page, params: { anchor: "diskusi" } %>
   <% else %>
     <p class="text-body-secondary">Belum ada diskusi.</p>
   <% end %>

@@ -7,7 +7,7 @@ class CommentsControllerTest < ActionDispatch::IntegrationTest
     @produk_lain = Product.create!(name: "Kemeja", price: 50_000, stock: 3)
   end
 
-    # mengirim komentar ke @produk, seperti form di halaman produk
+  # mengirim komentar ke @produk, seperti form di halaman produk
   def kirim(body: "Ukurannya pas?", parent_id: nil)
     # mengirim permintaan POST ke URL komentar produk
     post product_comments_url(@produk), params: { comment: { body: body, parent_id: parent_id } }

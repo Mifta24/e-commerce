@@ -61,8 +61,40 @@ class ProductDiscussionsTest < ActionDispatch::IntegrationTest
     tulis("Pas kok", user: @penjawab, parent: utama)
     sign_in_as @user
     get product_url(@produk)
-    assert_select "#diskusi details", 2                # satu di komentar utama, satu di balasan
+    assert_select "#diskusi details", 3                # satu di komentar utama, satu di balasan
     assert_select "#diskusi details textarea", text: /@Sari/
   end
 
+  test "komentar utama dibatasi per halaman dan terbaru dulu" do
+  7.times { |i| tulis("komentar ke-#{i + 1}") }
+  get product_url(@produk)
+  assert_includes response.body, "komentar ke-7"
+  assert_not_includes response.body, "komentar ke-2"
+  assert_select "#diskusi a[href*=?]", "reply_page=2"
+  assert_select "#diskusi a[href*=?]", "#diskusi"
+end
+
+test "halaman kedua menampilkan komentar yang lebih lama" do
+  7.times { |i| tulis("komentar ke-#{i + 1}") }
+  get product_url(@produk, reply_page: 2)
+  assert_includes response.body, "komentar ke-1"
+  assert_includes response.body, "komentar ke-2"
+  assert_not_includes response.body, "komentar ke-7"
+end
+
+test "balasan dilipat dan menampilkan jumlahnya" do
+  utama = tulis("Tanya")
+  tulis("Jawab 1", user: @penjawab, parent: utama)
+  tulis("Jawab 2", user: @penjawab, parent: utama)
+  get product_url(@produk)
+  assert_select "#diskusi details > summary", /Lihat 2 balasan/
+  assert_select "#diskusi details[open]", 0
+end
+
+test "balasan terbuka kalau ada ?buka=id komentar utamanya" do
+  utama = tulis("Tanya")
+  tulis("Jawab", user: @penjawab, parent: utama)
+  get product_url(@produk, buka: utama.id)
+  assert_select "#diskusi details[open] > summary", /Lihat 1 balasan/
+end
 end

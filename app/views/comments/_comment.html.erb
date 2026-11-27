@@ -24,7 +24,13 @@
 <%# hanya komentar utama yang memuat daftar balasannya (satu tingkat) %>
 <%# unless diapkai untuk mengecualikan balasan dari render ulang %>
 <% unless balasan %>
-  <%= render partial: "comments/comment", collection: comment.replies, as: :comment,
-        locals: { product: product, balasan: true } %>
+  <% if comment.replies.any? %>
+    <%# terbuka otomatis kalau baru saja membalas komentar ini (?buka=id) %>
+    <details class="mt-2" <%= "open" if params[:buka].to_i == comment.id %>>
+      <summary class="btn-text">Lihat <%= comment.replies.size %> balasan</summary>
+      <%= render partial: "comments/comment", collection: comment.replies, as: :comment,
+            locals: { product: product, balasan: true } %>
+    </details>
+  <% end %>
 <% end %>
 </article>
