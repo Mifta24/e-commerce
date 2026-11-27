@@ -8,6 +8,11 @@ class OrdersController < ApplicationController
 
   def show
     @order = current_user.orders.find(params[:id])
+    # ambil product id user saat ini
+    @product = @order.order_items.first&.product
+    @rating_saya= current_user&.ratings&.find_by(product: @product)
+    @boleh_menilai = current_user&.sudah_membeli?(@product) || false
+    @rating_saya= current_user&.ratings&.find_by(product: @product)
   end
 
   def new

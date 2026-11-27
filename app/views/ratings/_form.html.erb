@@ -1,0 +1,11 @@
+<%# Pakai: render "ratings/form", product:, rating_saya: %>
+<%= form_with model: Rating.new, url: product_rating_path(product),
+      method: (rating_saya ? :patch : :post) do |form| %>
+  <% (1..5).each do |n| %>
+    <label class="me-2">
+      <%= form.radio_button :stars, n, required: true, checked: (rating_saya&.stars == n) %>
+      <%= bintang(n) %>
+    </label>
+  <% end %>
+  <%= form.submit rating_saya ? "Ubah Rating" : "Beri Rating", class: "btn btn-ink btn-sm" %>
+<% end %>

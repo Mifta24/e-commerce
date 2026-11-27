@@ -1,0 +1,13 @@
+<%= render "ratings/form", product: product, rating_saya: rating_saya %>
+<section id="rating" class="mt-5 pt-4 border-top">
+  <h2 class="h4 mb-3">Rating</h2>
+  <div class="mb-3"><%= render "ratings/ringkasan", product: product %></div>
+
+  <% if boleh_menilai %>
+    <%# form untuk pembeli completed %>
+  <% elsif current_user %>
+    <p class="text-body-secondary">Rating dibuka setelah pesanan selesai.</p>
+  <% else %>
+    <p class="text-body-secondary"><%= link_to "Masuk", new_session_path %> untuk memberi rating.</p>.
+  <% end %>
+</section>
