@@ -17,6 +17,11 @@ class User < ApplicationRecord
 
   enum :role, { customer: 0, admin: 1 }
 
+  # true kalau user punya pesanan completed yang berisi produk ini
+  def sudah_membeli?(product)
+    orders.completed.joins(:order_items).exists?(order_items: { product_id: product.id })
+  end
+
   # searcfh untuk namaatau emailo customer
   def self.search(keyword)
     return all if keyword.blank?
